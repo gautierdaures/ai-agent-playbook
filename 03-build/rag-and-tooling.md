@@ -1,0 +1,17 @@
+# RAG & tooling
+
+## RAG and knowledge
+
+- RAG for ontologies.
+- Build a knowledge graph of relationships between entities.
+- Use it for recommendation and personalization by user profile.
+
+## Tooling practices
+
+- Put business rules in the tools; keep prompts light.
+- Validate inputs with regex directly in the tool, not via an LLM.
+- Define the output format with Pydantic.
+- Version your prompts; use a prompt framework, and consider XML-structured prompts.
+- Use tenacity for retry and timeout on API calls.
+
+Related design notes: [prompting](../02-design/agent-anatomy-and-prompting.md), [error handling](../02-design/error-handling.md).
