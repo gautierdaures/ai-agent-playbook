@@ -18,4 +18,8 @@ Validate tool inputs directly with regex in the tool, not via an LLM. For exampl
 - **Journaling** — every agent decision is journaled, with no PII in the journal.
 - **Architecture** — bake GDPR and AI Act compliance into the architecture, and integrate the AI Act into the prompts.
 
+## Data touching humans
+
+> **Caution:** Be careful with data visualization when it touches humans. How you surface data about people has real consequences.
+
 Related: [architecture](architecture.md), [logging](../06-operations/logging.md).

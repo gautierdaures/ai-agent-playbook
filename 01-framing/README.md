@@ -6,6 +6,5 @@ _Scope: problem definition, target users, feasibility, is-an-agent-the-right-too
 
 ## Notes
 
-- [do-you-need-an-agent.md](do-you-need-an-agent.md) — agent vs. deterministic chatbot; when to go multi-agent.
+- [do-you-need-an-agent.md](do-you-need-an-agent.md) — agent vs. deterministic chatbot; how to decide; when to go multi-agent.
 - [project-framing.md](project-framing.md) — the framing meetings, the team, design goals to commit to.
-- [example-use-cases.md](example-use-cases.md) — worked examples (bibliographic assistant, training assistant).

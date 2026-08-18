@@ -3,8 +3,8 @@
 ## RAG and knowledge
 
 - RAG for ontologies.
-- Build a graph of relationships, between articles and between researchers.
-- Use it for recommendation and personalization by user profile (see the [bibliographic assistant example](../01-framing/example-use-cases.md)).
+- Build a knowledge graph of relationships between entities.
+- Use it for recommendation and personalization by user profile.
 
 ## Tooling practices
 

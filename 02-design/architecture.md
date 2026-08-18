@@ -8,7 +8,9 @@ A BDI architecture for state management:
 - drives the execution thread;
 - handles the task response.
 
-The LLM is the "brain"; it decides what we are trying to achieve. Reference seen in the training: Microsoft Learn material, well designed.
+The LLM is the "brain"; it decides what we are trying to achieve.
+
+BDI is a classical agent model from multi-agent systems research, formalized by Rao and Georgeff: **beliefs** (the agent's view of the world), **desires/goals** (what it wants to achieve), and **intentions** (goals it has committed to acting on). See the references below.
 
 ## Layered architecture (separation of concerns)
 
@@ -43,3 +45,8 @@ Design so you can swap the LLM or the data source later without a rewrite.
 - **Logging** — log across the system, through the API and LLM boundary; every agent decision is journaled, with no PII in the journal.
 - **GDPR by design** — no PII in the LLM or in agent calls.
 - **Compliance** — bake GDPR and the AI Act into the architecture (see [security & compliance](security-and-compliance.md)).
+
+## References
+
+- Rao & Georgeff — [*BDI Agents: From Theory to Practice*](https://cdn.aaai.org/ICMAS/1995/ICMAS95-042.pdf) (1995), the foundational BDI paper.
+- [Belief–Desire–Intention architecture — overview](https://www.sciencedirect.com/topics/computer-science/belief-desire-intention-architecture) (ScienceDirect Topics).
