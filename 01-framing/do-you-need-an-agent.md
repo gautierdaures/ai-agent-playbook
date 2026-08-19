@@ -23,6 +23,37 @@ Rules of thumb:
 - **Go agentic when the path is genuinely unknown** and needs model-driven decisions at run time.
 - **Mind the trade-off** — agents trade latency and cost for flexibility. Make sure that trade is worth it.
 
+Treating workflows and autonomous agents as interchangeable causes one of two failures: **over-engineering** a simple, well-understood task with needless autonomy, or **under-engineering** a genuinely open-ended problem by forcing it into a rigid pipeline that breaks the moment reality deviates. For most organisations, an AI-driven *workflow* — not a fully autonomous agent — hits the right balance today.
+
+## Think in autonomy levels
+
+It helps to see autonomy as a dial, not a switch. A common ladder:
+
+- **L0 — none:** classic ML / rules for narrow tasks.
+- **L1 — assistive:** a model handles a single step under direct instruction.
+- **L2 — partial:** agentic workflow runs multi-step tasks with human oversight. *This is where most production value sits in 2025–2026.*
+- **L3 — high:** goal-oriented, mostly self-directed, occasional guidance.
+- **L4 — full:** end-to-end autonomy.
+
+Start at the lowest level that solves the problem, and **widen autonomy gradually as the agent earns trust** through evaluation and safe rollout (see [scoping the first version](scoping-the-first-version.md) and [rollout & safety](../05-deployment/rollout-and-safety.md)).
+
+### How to determine the right level
+
+Set the level from the task, not from ambition. Questions the product owner should put to the people who do the work today:
+
+- **Predictability** — "Walk me through the task. Can you write the steps down as rules, or does each case need judgement?" Writable steps point to L0–L1.
+- **Variability** — "How often does a case not fit the normal pattern?" Frequent edge cases push toward higher autonomy — or away from automation entirely.
+- **Cost of being wrong** — "If it gets this wrong, what happens, and can we undo it?" High-stakes or irreversible outcomes cap the level and force human gates (see [risk-adjust the value](measuring-value.md) and [feasibility & readiness](feasibility-and-readiness.md)).
+- **Oversight tolerance** — "How much checking is acceptable before this becomes more work than it saves?" This sets where the human sits in the loop.
+- **Frequency & volume** — "How many times a day or week is this done?" Low volume rarely justifies high autonomy.
+- **Trust & context** — "Would you be comfortable letting a system do this unsupervised? Why or why not?" Surfaces adoption and trust constraints early (see [adoption & change management](../05-deployment/adoption-and-change-management.md)).
+
+Rule of thumb: pick the **lowest level that clears the quality bar**, and let evidence from evaluation earn each step up.
+
+## A caution on the market
+
+Agentic AI is powerful but oversold. Gartner forecasts **over 40% of agentic AI projects will be cancelled by 2027** — mostly for unclear business value and weak governance, not model limitations. The antidote is framing discipline: the right use case ([use-case selection](use-case-selection.md)), honest feasibility ([feasibility & readiness](feasibility-and-readiness.md)), and a measurable value case ([measuring value](measuring-value.md)).
+
 ## Start simple, go multi-agent only when justified
 
 Prefer starting with a single simple agent. Move to multi-agent only when:
@@ -40,3 +71,5 @@ The agent produces a report, not a verdict. Especially when the outcome touches 
 ## References
 
 - [Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)
+- [Anthropic — Measuring AI agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)
+- [The 4 levels of AI agents: when to use workflows vs autonomous systems (Barnacle)](https://www.barnacle.ai/blog/2025-09-25-agents-intro)
