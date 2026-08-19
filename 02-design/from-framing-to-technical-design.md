@@ -20,7 +20,7 @@ Each framing output forces a concrete design question. Work down the list; the r
 | Framing output | Design question it forces | Where it's answered |
 | --- | --- | --- |
 | The job, decomposed into steps | Which steps are LLM reasoning vs. deterministic code? | [architecture](architecture.md), [multi-agent](multi-agent-orchestration.md) |
-| The one value lever | What does the architecture optimise for — latency, quality, or cost? | [architecture](architecture.md), [cost management](../05-deployment/cost-management.md) |
+| The one value lever | What does the architecture optimise for — latency, quality, or cost? | [architecture](architecture.md), [cost management](../06-operations/cost-management.md) |
 | Success criteria as numbers | What is the eval set and which metrics gate a release? | [evaluation methods](../04-evaluation/evaluation-methods.md) |
 | Autonomy level | Agent vs. workflow; how much the control loop decides; how tight the guardrails | [architecture](architecture.md), [error handling](error-handling.md) |
 | Data readiness | Short-term vs. long-term memory; RAG or not | [memory](memory.md), [RAG & tooling](../03-build/rag-and-tooling.md) |

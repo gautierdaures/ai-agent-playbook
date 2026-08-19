@@ -4,9 +4,7 @@ A technically successful agent delivers zero value if the people who do the work
 
 ## Why it makes or breaks value
 
-- Most agent value depends on humans changing how they work; left unmanaged, freed capacity dilutes and the ROI never lands (see [measuring value](../01-framing/measuring-value.md)).
-- Only about **28%** of organisations are positioned to turn AI deployment into high-value outcomes — the differentiator is people and culture, not the model ([EY Work Reimagined 2025](https://www.ey.com/en_gl/insights/workforce/work-reimagined-survey)).
-- **66%** of AI users get no guidance on how to reinvest the time the agent frees ([BCG](https://www.bcg.com/publications/2025/how-people-can-stay-super-with-gen-ai)).
+Most agent value depends on humans changing how they work: left unmanaged, freed capacity dilutes and the ROI never lands. The *benefit-dilution* / phantom-savings trap and the supporting figures (only ~28% of organisations convert AI into high-value outcomes; ~66% of users get no guidance on reinvesting freed time) are covered in [measuring value](../01-framing/measuring-value.md#what-do-you-do-with-the-time-earned). This note is the other half of that problem: the change-management work that turns freed capacity into something real.
 
 ## Acculturation: bring people along
 
@@ -27,6 +25,5 @@ Prosci's **ADKAR** is a practical checklist to run before and through rollout: *
 
 ## References
 
-- [EY — Work Reimagined 2025 survey](https://www.ey.com/en_gl/insights/workforce/work-reimagined-survey)
 - [Prosci — The ADKAR change management model](https://www.prosci.com/methodology/adkar)
-- [BCG — Staying "super" with GenAI: reinvesting freed time](https://www.bcg.com/publications/2025/how-people-can-stay-super-with-gen-ai)
+- Supporting ROI/adoption figures (EY, BCG) are cited in [measuring value](../01-framing/measuring-value.md).

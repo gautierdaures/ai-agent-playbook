@@ -8,8 +8,4 @@ For rational or deterministic chains, use deterministic evaluation: exact, repro
 
 ## Expert debate
 
-Expert debate, having several agents argue a point, reduces errors and helps break loops. It doubles as an [error-handling technique](../02-design/error-handling.md).
-
-## Semantic cache
-
-Semantic caching returns the result of a similar previous query instead of recomputing. It cuts latency and avoids [useless LLM calls](../05-deployment/cost-management.md).
+Having several agents argue a point reduces errors, surfaces disagreement, and can break a stuck decision. This is the canonical home for the technique; [error handling](../02-design/error-handling.md) reuses it to break tie/loop situations.

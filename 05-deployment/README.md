@@ -6,6 +6,5 @@ _Scope: rollout strategy, infrastructure, release gating, staging vs. production
 
 ## Notes
 
-- [cost-management.md](cost-management.md) — mastering token/model costs; no useless LLM calls.
-- [rollout-and-safety.md](rollout-and-safety.md) — tiered data-masking (V1/V2/V3), absolute stop conditions, traceability.
+- [rollout-and-safety.md](rollout-and-safety.md) — the staged-rollout ladder, tiered data-masking (V1/V2/V3), absolute stop conditions, traceability.
 - [adoption-and-change-management.md](adoption-and-change-management.md) — driving real usage: acculturation, ADKAR, adoption signals.

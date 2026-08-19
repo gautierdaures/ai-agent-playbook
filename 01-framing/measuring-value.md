@@ -86,7 +86,7 @@ Track two layers. Business KPIs prove the value; system KPIs explain and protect
 - **Adoption** — active users, and the share of *eligible* tasks actually run through the agent. A great agent nobody uses creates zero value.
 - **Human override / escalation rate** — how often people correct or take over; a live signal of trust and quality.
 - **Accuracy / task success rate** and **hallucination rate** — see [evaluation methods](../04-evaluation/evaluation-methods.md).
-- **Latency and cost per run** — the operational price of the value; see [cost management](../05-deployment/cost-management.md).
+- **Latency and cost per run** — the operational price of the value; see [cost management](../06-operations/cost-management.md).
 
 Pick a **small** set that maps to the primary lever: one north-star business KPI plus a handful of guardrail KPIs beats a dashboard nobody reads.
 

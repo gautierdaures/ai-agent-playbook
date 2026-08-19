@@ -78,9 +78,8 @@ Design so you can swap the LLM or the data source later without a rewrite. The l
 ## Cross-cutting best practices
 
 - **Separation of concerns** — each layer owns its responsibility.
-- **Logging** — log across the system, through the API and LLM boundary; every agent decision is journaled, with no PII in the journal.
-- **GDPR by design** — no PII in the LLM or in agent calls.
-- **Compliance** — bake GDPR and the AI Act into the architecture (see [security & compliance](security-and-compliance.md)).
+- **Logging** — journal every agent decision across the API and LLM boundary; the mechanics (separate service, dating, retention) live in [logging](../06-operations/logging.md).
+- **Compliance & privacy** — no PII in the LLM or agent calls; bake GDPR and the AI Act into the architecture. Owned in [security & compliance](security-and-compliance.md).
 
 ## References
 

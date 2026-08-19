@@ -66,7 +66,7 @@ When a task naturally splits into several sub-questions, that is a signal for a 
 
 ## Keep the human in the loop
 
-The agent produces a report, not a verdict. Especially when the outcome touches people, a human makes the final call.
+The agent produces a report, not a verdict. Especially when the outcome touches people, a human makes the final call. How to place those gates inside the system — approval, review, escalation — is designed in [human-in-the-loop](../02-design/human-in-the-loop.md).
 
 ## References
 
