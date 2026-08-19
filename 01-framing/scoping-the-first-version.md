@@ -2,9 +2,19 @@
 
 The last framing decision is how *small* to make version one. The goal of the first project is not a finished platform — it is **a working production agent and a team that now knows how to ship the next three.** Keep it narrow.
 
+## Stages, and re-framing at each gate
+
+Yes — run the work in stages, and re-frame (lightly) at each gate rather than framing once and hoping:
+
+- **PoC (proof of concept)** — does the approach work at all on real cases? Throwaway is fine. Frame it around one question and a pass/fail bar.
+- **MVP / pilot** — the smallest version real users run on live work, instrumented for value and safety. This is the scope this note is mostly about.
+- **Production** — hardened, integrated, rolled out with monitoring and support.
+
+Between stages, hold a short **stage-gate**: re-confirm the use case still pays ([measuring value](measuring-value.md)), the data and integration assumptions held ([feasibility & readiness](feasibility-and-readiness.md)), and the scope for the next stage. Framing is not repeated in full each time — it *narrows and sharpens* with the evidence you now have. Kill or pivot here if the evidence says so; that is the gate doing its job, not a failure.
+
 ## Narrow beats ambitious
 
-Most first agent projects die in "pilot purgatory" — an estimated **88% of AI pilots languish indefinitely** — because the scope was too broad to ever finish. Counter it deliberately:
+Most first agent projects die in "pilot purgatory" — an estimated **88% of AI proof-of-concepts never reach production** ([IDC / Lenovo, via CIO](https://www.cio.com/article/3850763/88-of-ai-pilots-fail-to-reach-production-but-thats-not-all-on-it.html); for every 33 POCs launched, only four graduate) — often because the scope was too broad to ever finish. Counter it deliberately:
 
 - **One use case, one workflow, one clear input and output.** A multi-use-case, multi-vendor pilot is not a proof of concept; it is a procurement project.
 - **Choose a workflow a human already does today**, so you inherit a baseline and real historical cases to test on.
@@ -16,7 +26,7 @@ Agree the success criteria up front, in concrete figures — not "it works well"
 
 - **Capability target** — success rate on real historical cases (e.g. "≥90% on 200 past tickets").
 - **Safety target** — acceptable escalation / human-override rate and maximum tolerable error.
-- **Operational target** — acceptable latency and **cost per task**, and a TCO projection at full scale.
+- **Operational target** — acceptable latency and **cost per task**, and a **TCO** (total cost of ownership — build, run, LLM/API usage, human review, and maintenance) projection at full scale.
 
 The question a modern agent PoC must answer is no longer "does the model respond well?" but **"can the system reliably carry the work to completion without constant human intervention?"** Write the pass/fail line down before you start, so the review is evidence, not opinion.
 
@@ -41,7 +51,7 @@ A technically successful pilot still fails the business if the value evaporates.
 
 - The **baseline** is recorded so the delta is provable (see [measuring value](measuring-value.md)).
 - The **earned time / capacity has a named destination** — reallocation, absorbed volume, or turnaround — or the saving is phantom.
-- **Adoption** is designed for, not assumed.
+- **Adoption** is designed for, not assumed (see [adoption & change management](../05-deployment/adoption-and-change-management.md)).
 
 > **Caution:** Expect roughly **50–60% of pilot projections to materialise in production** — the gap is integration complexity, change management, and adoption, not the model. Budget for the pilot-to-production step; don't treat a green pilot as a finished result.
 

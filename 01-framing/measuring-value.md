@@ -13,6 +13,8 @@ The industry has a proof problem, not just a technology problem:
 
 The lesson from every framework below is the same: **the winners decide what to measure, and what to do with the value, before they deploy.** Rigorous measurement is itself a driver of better outcomes.
 
+Deciding *what to do with the value* is a strategic and ethical choice, not a detail — cut costs, reduce headcount, or redirect freed time to higher-value work? It is covered in depth in [what do you do with the time earned?](#what-do-you-do-with-the-time-earned) below.
+
 ## Start from a baseline
 
 Value is a *delta*, so you need the "before". Do a **process map** of the current, agent-free process and capture:
@@ -38,6 +40,14 @@ Consulting frameworks converge on a handful of value dimensions. McKinsey's busi
 
 Name the **one primary lever** for *this* project. A system optimised for time saved is not the same as one optimised for quality, and the KPI set follows the lever.
 
+## Risk-adjust the value: the cost of failure
+
+Value is upside *minus* the cost of getting it wrong, times how often that happens. Weigh it explicitly, because a high cost of failure can erase an attractive efficiency gain:
+
+- **How bad is a wrong action, and can it be undone?** High-stakes, irreversible decisions — granting a loan, moving money, a medical or legal call, a purchase — carry a cost of failure that can dwarf the time saved.
+- **When the cost of failure is high, the answer may be "not autonomous — or not AI at all."** Keep a human decision-maker, narrow the agent to *preparing* the case rather than deciding it, or use a deterministic rule. The agent produces a report, not a verdict (see [do you need an agent](do-you-need-an-agent.md)).
+- **Price the guardrails into the value case.** Human review, audit, and escalation are real recurring costs that lower net value; a use case that only pays *without* oversight is not viable. See [feasibility & readiness](feasibility-and-readiness.md) and [error handling](../02-design/error-handling.md).
+
 ## What do you do with the time earned?
 
 This is the question most business cases skip, and it is where ROI is won or lost. **Time saved is only value if the freed capacity is redeployed** — a trap named the *benefit dilution effect* (ActiveOps) or *phantom savings*:
@@ -45,13 +55,13 @@ This is the question most business cases skip, and it is where ROI is won or los
 - Only about **half** of AI time savings convert to measurable output when the workforce response is left unmanaged.
 - **66%** of AI users get *no guidance* on how to reinvest saved time (BCG).
 - Freed time absorbs into longer breaks, lower-priority admin, or a slower pace — the "productivity rebound effect" (St. Louis Fed). Senior workers can show **0%** net gain when routine tasks are automated but nothing replaces them.
-- Only about **28%** of organisations actively manage the reallocation and actually capture the value.
+- Only about **28%** of organisations are positioned to turn AI deployment into high-value outcomes — the differentiator is people and culture, not the model ([EY Work Reimagined 2025](https://www.ey.com/en_gl/insights/workforce/work-reimagined-survey)).
 
 Decide, at framing time, which destination applies — and make it concrete:
 
 - **Reallocation** — people move to higher-value work the agent cannot do. Value = the difference between the old task and the new work. *This only pays if the new work is genuinely worth more than the old.*
 - **Capacity / throughput** — the team absorbs more volume without hiring. Value = the avoided cost of the headcount you did not add.
-- **Headcount reduction** — a real but sensitive lever; be explicit if this is the intent, because it changes adoption and trust dynamics.
+- **Headcount reduction** — a real but sensitive lever; be explicit if this is the intent, because it changes adoption and trust dynamics (see [adoption & change management](../05-deployment/adoption-and-change-management.md)). Hiding a cost-cutting intent behind "freeing people for higher-value work" corrodes the trust the rollout depends on.
 - **Turnaround** — the same work ships faster, unlocking a business capability (a service level, an SLA, a customer promise).
 
 > **Caution:** "We saved 200 hours a month" is a *phantom saving* unless those hours become reallocated work, absorbed volume, or a cut cost line. The business will not feel the value, the ROI model never materialises, and the project looks like a failure even when the agent works perfectly. Tie earned time to a named destination up front, and put visibility on where the freed time actually goes.

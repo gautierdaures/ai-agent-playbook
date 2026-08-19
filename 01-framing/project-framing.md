@@ -20,6 +20,10 @@ Use a lightweight RACI (Responsible / Accountable / Consulted / Informed) so eve
 
 This keeps the human-in-the-loop principle structural, not aspirational.
 
+## Commit stakeholder time up front
+
+Name the **expected involvement of each stakeholder in hours per week**, and get it agreed before the project starts. Agent projects fail quietly when the business is too busy to guide evaluation, supply ground truth, or test the product — the model is fine, but no one is available to steer it. Be concrete: domain experts to validate cases and label examples, the sponsor for decisions, end users for testing. If that time cannot be committed, the project is not ready to start.
+
 ## Map the stakeholders
 
 Beyond the core team, sort the people affected by a power/interest grid and engage accordingly: work closely with the high-power/high-interest sponsors, keep high-power/low-interest players satisfied, keep high-interest allies (often the end users) informed, and give everyone else light-touch updates. Adoption depends on the people who do the work today feeling brought along, not replaced by surprise.
