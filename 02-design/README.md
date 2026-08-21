@@ -6,7 +6,7 @@ _Scope: framing-to-design translation, architecture, the agent loop, tool design
 
 ## Notes
 
-- [from-framing-to-technical-design.md](from-framing-to-technical-design.md) — turning framing artefacts into design decisions; the agent spec; the technical framing doc.
+- [from-framing-to-technical-design.md](from-framing-to-technical-design.md) — turning framing artefacts into design decisions; how to run the translation session, with a worked example; the agent spec template; the technical framing doc outline.
 - [architecture.md](architecture.md) — the core components, the control loop, BDI, layered & hexagonal separation, MCP, evolvability.
 - [agent-anatomy-and-prompting.md](agent-anatomy-and-prompting.md) — Perception/Reasoning/Action; prompt frameworks (COSTAR/RISEN/CCR) and good practices.
 - [tool-design.md](tool-design.md) — tools as agent/system contracts; descriptions the model reads, granularity, actionable errors, iteration.

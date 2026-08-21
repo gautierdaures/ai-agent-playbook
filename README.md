@@ -25,7 +25,7 @@ Some concerns are **cross-cutting**: value, evaluation, cost, observability, sec
 | Evaluation techniques | [`04-evaluation/evaluation-methods`](04-evaluation/evaluation-methods.md) |
 | Staged rollout / progressive autonomy | [`05-deployment/rollout-and-safety`](05-deployment/rollout-and-safety.md) |
 | Adoption & change management | [`05-deployment/adoption-and-change-management`](05-deployment/adoption-and-change-management.md) |
-| Cost | [`06-operations/cost-management`](06-operations/cost-management.md) |
+| Cost (designed in 2, run in 6) | [`06-operations/cost-management`](06-operations/cost-management.md) |
 | Logging & observability | [`06-operations/`](06-operations/) |
 | Security, privacy & compliance | [`02-design/security-and-compliance`](02-design/security-and-compliance.md) |
 

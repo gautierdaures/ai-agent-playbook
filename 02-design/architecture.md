@@ -68,6 +68,7 @@ Work from the [technical framing doc](from-framing-to-technical-design.md):
 3. **Decide memory** — does the task need anything beyond the current context? Only add long-term memory if it does ([memory](memory.md)).
 4. **Place the guardrails** — validate inputs and outputs, and put a human gate on every irreversible action.
 5. **Wire observability from day one** — traces and evals are not a retrofit ([project framing](../01-framing/project-framing.md)).
+6. **Cost the design before building it** — count the LLM calls per run and the context each one carries, and check the result against the cost-per-task target from framing. Architecture, not tuning, is what fixes unit cost; the levers and the back-of-envelope arithmetic are in [cost management](../06-operations/cost-management.md).
 
 Start with the simplest arrangement that meets the criteria and let it grow.
 
@@ -80,6 +81,7 @@ Design so you can swap the LLM or the data source later without a rewrite. The l
 - **Separation of concerns** — each layer owns its responsibility.
 - **Logging** — journal every agent decision across the API and LLM boundary; the mechanics (separate service, dating, retention) live in [logging](../06-operations/logging.md).
 - **Compliance & privacy** — no PII in the LLM or agent calls; bake GDPR and the AI Act into the architecture. Owned in [security & compliance](security-and-compliance.md).
+- **Cost** — a non-functional budget like latency: model routing, context size, and the number of calls are architecture decisions. Owned in [cost management](../06-operations/cost-management.md).
 
 ## References
 
