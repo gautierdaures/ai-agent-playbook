@@ -6,5 +6,5 @@ _Scope: eval design, datasets, benchmarks, LLM-as-judge, human review, regressio
 
 ## Notes
 
-- [evaluation-methods.md](evaluation-methods.md) — continuous & deterministic eval, expert debate, semantic cache.
+- [evaluation-methods.md](evaluation-methods.md) — continuous & deterministic eval, expert debate.
 - [regression-and-drift.md](regression-and-drift.md) — prompt drift vs. model drift; regression testing before prompt changes.

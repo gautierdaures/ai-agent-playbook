@@ -36,14 +36,7 @@ Even in a narrow pilot, decide:
 
 - Every system the agent reads from and writes to (from [feasibility & readiness](feasibility-and-readiness.md)).
 - **How it fails safely** — fallbacks, timeouts, and where a human takes over. See [error handling](../02-design/error-handling.md).
-- A **staged rollout** that widens autonomy gradually as evidence accumulates:
-
-  1. **Shadow mode** — the agent runs alongside the human, output compared, nothing shipped.
-  2. **Human-in-the-loop** — the agent proposes, a human approves before anything takes effect.
-  3. **Supervised autonomy** — the agent acts, humans audit a sample and handle exceptions.
-  4. **Autonomous** — only for proven, low-risk paths.
-
-See [rollout & safety](../05-deployment/rollout-and-safety.md) for the deployment mechanics.
+- A **staged rollout** that widens autonomy gradually as evidence accumulates — shadow mode → human-in-the-loop → supervised autonomy → autonomous. The ladder and its mechanics live in [rollout & safety](../05-deployment/rollout-and-safety.md).
 
 ## Plan the value capture, not just the demo
 

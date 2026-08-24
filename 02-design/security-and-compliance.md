@@ -10,7 +10,7 @@
 
 ## Controlling tool inputs
 
-Validate tool inputs directly with regex in the tool, not via an LLM. For example, do not ask the model to sanitize; do it in code.
+Validate tool inputs in code (schema / regex) inside the tool, never by asking the model to sanitize its own input — this is both a correctness and an injection-defence measure. See [tool design](tool-design.md) for the full treatment.
 
 ## GDPR & AI Act
 

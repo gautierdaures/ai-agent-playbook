@@ -32,7 +32,7 @@ An agent's reach is defined by its tools (see [RAG & tooling](../03-build/rag-an
 ## Technical feasibility
 
 - **Task complexity vs. autonomy needed** — can the path be hardcoded (workflow) or must the model decide at run time (agent)? See [do you need an agent](do-you-need-an-agent.md).
-- **Latency and cost budget** — is the required cost-per-task and response time achievable at the target volume? See [cost management](../05-deployment/cost-management.md).
+- **Latency and cost budget** — is the required cost-per-task and response time achievable at the target volume? See [cost management](../06-operations/cost-management.md).
 - **Quality bar** — is the acceptable error/escalation rate reachable with today's models on this task?
 
 ## Build vs. buy
