@@ -1,6 +1,6 @@
 # Testing agent code
 
-Evals measure the agent's *judgement* — is the answer good? ([section 4](../04-evaluation/README.md)). Tests protect everything **deterministic around** that judgement: tool code, schemas, the loop, guardrails, adapters. Teams that only build evals end up debugging a broken tool through the model, which is slow and misleading; teams that only write unit tests ship an agent nobody measured. You need both, and they answer different questions.
+Evals measure *judgement* ([section 4](../04-evaluation/README.md)). Tests protect everything deterministic around it: tool code, schemas, the loop, guardrails, adapters. Only evals means debugging a broken tool through the model; only unit tests means shipping an agent nobody measured.
 
 ## The test pyramid for an agent system
 
@@ -14,7 +14,7 @@ Evals measure the agent's *judgement* — is the answer good? ([section 4](../04
 | **Smoke tests** | A couple of golden cases end to end, real model | Real | Pre-deploy |
 | **Evals** | Answer quality on the eval set | Real | On prompt/model change, pre-release ([section 4](../04-evaluation/evaluation-methods.md)) |
 
-The pyramid's base is ordinary software testing, and it should feel ordinary: fast, deterministic, no API keys.
+The base is ordinary software testing and should feel ordinary: fast, deterministic, no API keys.
 
 ## Fake the model, script the run
 
@@ -47,7 +47,7 @@ For provider-level tests, record real responses once and replay them as fixtures
 
 ## Test the failure paths first
 
-In production most interesting behaviour is a failure path, and those paths are exactly what is never exercised by hand:
+Most interesting production behaviour is a failure path, and those are exactly what never gets exercised by hand:
 
 - **Tool times out** → structured error returned → agent continues without that input, or escalates. ([error handling](../02-design/error-handling.md))
 - **Tool returns 429 / 5xx** → retry with backoff → succeeds on the second attempt; and a 4xx is *not* retried.
@@ -60,7 +60,7 @@ Each of these is a fast, boring unit test — and each is a production incident 
 
 ## Snapshot the things the model reads
 
-A tool's name, description, and parameter docs are prompt ([tool design](../02-design/tool-design.md)). Editing a description changes behaviour as surely as editing code, so snapshot-test the serialised tool definitions and the system prompt. The point is not to freeze them but to make every change a deliberate, visible diff that triggers a regression run ([regression & drift](../04-evaluation/regression-and-drift.md)).
+A tool's name, description, and parameter docs are prompt ([tool design](../02-design/tool-design.md)) — editing a description changes behaviour as surely as editing code. Snapshot the serialised tool definitions and system prompt, not to freeze them but to make every change a visible diff that triggers a regression run ([regression & drift](../04-evaluation/regression-and-drift.md)).
 
 ## In CI
 
@@ -69,7 +69,7 @@ A tool's name, description, and parameter docs are prompt ([tool design](../02-d
 - **On any prompt, model, or tool-definition change** — the eval set, gated on the release criteria from the agent spec.
 - **Pre-deploy** — smoke tests on a couple of golden cases with the real model.
 
-Keep the model out of the fast lane. A test suite that needs API keys and 40 seconds per case stops being run, and a suite that is not run is not a safety net.
+Keep the model out of the fast lane: a suite needing API keys and 40 s per case stops being run.
 
 ## References
 

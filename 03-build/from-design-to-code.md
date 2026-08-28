@@ -16,7 +16,7 @@ A missing item is not a detail to sort out later: an agent spec without stop con
 
 ### The step decomposition is a table, not pseudocode
 
-It is a design artefact in the technical framing doc — one row per step of the task, each marked with who executes it — and it is deliberately not code: it is written and argued over before anyone opens an editor, and non-engineers on the project have to be able to read it.
+A design artefact in the technical framing doc — one row per step, marked with who executes it. Not code: it is argued over before anyone opens an editor, and non-engineers have to be able to read it.
 
 | # | Step | Who | Why |
 | --- | --- | --- | --- |
@@ -28,21 +28,21 @@ It is a design artefact in the technical framing doc — one row per step of the
 | 6 | Approve or edit the draft | `HUMAN` | Irreversible, customer-facing |
 | 7 | Send and update the ticket | `CODE` | Deterministic write, idempotent |
 
-The marking is the substance of the handover, because it records **what the model is allowed to decide**. Each mark then has a fixed translation into build:
+The marking is the substance of the handover: it records **what the model is allowed to decide**. Each mark translates fixedly into build:
 
-- `CODE` → a plain function, exposed as a tool if the model calls it. It gets validation, a timeout, and a structured error, and it is unit-tested without a model.
-- `LLM` → a model call against a versioned prompt file with a schema-validated output. This is what evals measure.
-- `HUMAN` → a gate the run checkpoints at and resumes from, not a note in the doc ([state & execution](state-and-execution.md)).
+- `CODE` → a plain function, exposed as a tool if the model calls it; validation, timeout, structured error, unit-tested without a model.
+- `LLM` → a call against a versioned prompt file with schema-validated output. What evals measure.
+- `HUMAN` → a gate the run checkpoints at and resumes from ([state & execution](state-and-execution.md)).
 
-The useful pressure it applies is downward: every step marked `LLM` that could have been `CODE` is latency, cost, and a new failure mode bought for nothing. Reviewing the table is mostly reviewing that column.
+The pressure runs downward: an `LLM` step that could have been `CODE` is latency, cost, and a failure mode bought for nothing. Reviewing the table is mostly reviewing that column.
 
 ## Build the walking skeleton first
 
-The instinct is to build the pieces well one at a time — the retrieval pipeline, then the tools, then the loop. Resist it. Build the **thinnest end-to-end path that produces a real output**, then deepen it:
+The instinct is to build each piece well in turn — retrieval, then tools, then the loop. Resist it. Build the **thinnest end-to-end path that produces a real output**, then deepen:
 
 > real input → real model call → one stubbed tool → validated output → logged trace
 
-A day or two spent on that skeleton surfaces the risks that actually kill agent projects — an API that needs credentials nobody has, a response shape the model refuses to produce, a latency budget blown by one slow system — while they are still cheap to fix. A perfect retrieval pipeline in a system that cannot reach the CRM is worth nothing.
+A day or two on that skeleton surfaces what actually kills agent projects — credentials nobody has, a response shape the model refuses to produce, a latency budget blown by one slow system — while they are still cheap. A perfect retrieval pipeline in a system that cannot reach the CRM is worth nothing.
 
 ## Order of construction
 
@@ -81,24 +81,24 @@ docs/
   specs/             the agent spec(s), versioned with the code implementing them
 ```
 
-`src/` is there for the usual reason: it forces the tests to run against the *installed* package rather than whatever happens to be in the working directory, so a missing entry in your packaging config fails in CI instead of in production. It costs you an editable install and nothing else.
+`src/` forces tests against the *installed* package, so a missing packaging entry fails in CI rather than in production.
 
-One agent-specific consequence: `prompts/` lives **inside** the package, not at the repo root. Prompts are code — they ship with the artefact and are selected by version at runtime — so they must be package data (read via `importlib.resources`, and declared in `pyproject.toml`), not files read by relative path. A prompt directory outside the package works in dev and disappears in the wheel.
+The agent-specific consequence: `prompts/` lives **inside** the package. Prompts ship with the artefact and are selected by version at runtime, so they are package data (`importlib.resources`, declared in `pyproject.toml`), not files read by relative path — a prompt directory outside the package works in dev and vanishes in the wheel.
 
-Two boundaries earn their keep: **adapters** (so the CRM can be swapped or faked in tests without touching the loop) and **prompts as files** (so a prompt change is a reviewable diff with a version id). Both are what make the design's [evolvability](../02-design/architecture.md) real rather than aspirational.
+Two boundaries earn their keep: **adapters** (swap or fake the CRM without touching the loop) and **prompts as files** (a prompt change is a reviewable diff with a version id).
 
 ### Why the specs are in the repo
 
-This is a convention, not a standard, and it is worth being explicit about the trade. The agent spec is not background reading — it is the document the loop's stop conditions, the guardrails, and the eval thresholds are all derived from, and tests assert against its numbers. Keeping it in `docs/specs/` means a PR that changes the escalation threshold changes the spec and the test in the same diff, and a reviewer sees both.
+A convention, not a standard. The spec is what stop conditions, guardrails, and eval thresholds derive from, and what tests assert against — in `docs/specs/`, changing the escalation threshold touches spec and test in one diff.
 
-The alternative — the spec in Confluence or Notion, where the rest of the business can read it — has the failure mode everyone has met: the page says 0.7, the code says 0.6, and nobody can say which is intentional. If the spec must live in a wiki for the audience, keep the machine-readable part (thresholds, budgets, I/O contract) in the repo and have the wiki link to it, so there is exactly one authoritative copy of every number.
+The wiki alternative has the familiar failure mode: the page says 0.7, the code says 0.6, nobody knows which is intentional. If it must live in Confluence for the audience, keep the machine-readable part — thresholds, budgets, I/O contract — in the repo and link to it.
 
 ## Configuration and secrets
 
 - **One settings object**, loaded from environment variables, holding model ids, temperatures, limits, retrieval parameters, and prices. No literals scattered through the code — you will change all of them during tuning.
 - **Per-environment config** (dev / staging / prod) with the same code path. Differences that live in `if env == "prod"` branches are the ones that break on release day.
 - **Pin versions** — model ids, SDKs, and the embedding model. An unpinned model id means the system silently changes underneath you ([regression & drift](../04-evaluation/regression-and-drift.md)).
-- **Feature-flag the risky parts** — autonomy level, new tools, prompt versions, model id. Ship both paths in the same build, dark, and choose between them at runtime. Turning one on is then a flag flip rather than a rebuild-and-redeploy: you can enable it for 5% of tickets, and **turn it off in seconds without shipping anything** ([rollout & safety](../05-deployment/rollout-and-safety.md)). That last property is why it matters here more than in ordinary services — the way an agent fails is by behaving plausibly and wrongly at scale, and reverting a deploy is far too slow a lever when you notice.
+- **Feature-flag the risky parts** — autonomy level, new tools, prompt versions, model id. Both paths ship dark in one build and are chosen at runtime, so enabling is a flag flip: 5% of tickets, and **off in seconds without shipping** ([rollout & safety](../05-deployment/rollout-and-safety.md)). It matters more here than in ordinary services because agents fail by being plausibly wrong at scale, and a deploy revert is too slow a lever.
 
 ## Definition of done for the first slice
 
@@ -107,7 +107,7 @@ Build is finished when, for the ticket-triage example carried through [from fram
 - every `CODE` step is a tool with validation, a timeout, and a structured error;
 - every `HUMAN` step is an actual gate the run pauses at, not a note in the doc;
 - the run emits a trace with tokens, cost, model, prompt version, and tool calls;
-- the eval harness runs the eval set the spec named — 300 historical tickets in this worked example, a number that came from the available labelled history, not from a rule — and reports the spec's release criteria;
+- the eval harness runs the set the spec named (300 historical tickets here — the labelled history available, not a rule) and reports the release criteria;
 - the failure paths — tool down, malformed output, step limit hit — have been exercised on purpose, not just imagined.
 
 The last one is the one teams skip, and it is the one production tests for you.

@@ -1,6 +1,6 @@
 # State & execution
 
-Where the run's state lives, and how a run actually executes in a process. This is the part of the build that decides whether a run can be paused for a human, resumed after a crash, or cancelled when the user closes the tab — and it is far easier to get right at the start than to retrofit around a working loop.
+Where run state lives and how a run executes in a process. This decides whether a run can pause for a human, resume after a crash, or cancel cleanly — and it is far cheaper to get right at the start than to retrofit around a working loop.
 
 ## Where state lives
 
@@ -25,9 +25,9 @@ Record with each checkpoint what you will want during an incident: model, prompt
 
 ## A human gate is a pause, not a blocking call
 
-This is the design decision that most often surprises teams at build time. If the flow is *agent proposes → human approves → agent executes*, the run may sit idle for hours or overnight. You cannot hold an HTTP request, a database transaction, or an in-memory Python object open across that wait.
+If the flow is *agent proposes → human approves → agent executes*, the run sits idle for hours. You cannot hold an HTTP request, a database transaction, or an in-memory object open across that wait.
 
-So a gate turns the run into a **durable, resumable workflow**: the agent runs to the gate, checkpoints, and exits. The approval — from a UI, an email link, a Slack action — resumes the run from that checkpoint in a fresh process. Everything the continuation needs must be in the checkpoint, and every gate needs a timeout policy: what happens to a proposal nobody approves by Friday ([human-in-the-loop](../02-design/human-in-the-loop.md)).
+A gate therefore turns the run into a **durable, resumable workflow**: run to the gate, checkpoint, exit. The approval — UI, email link, Slack action — resumes from that checkpoint in a fresh process. Everything the continuation needs must be in the checkpoint, and every gate needs a timeout policy for the proposal nobody approves by Friday ([human-in-the-loop](../02-design/human-in-the-loop.md)).
 
 ## Execution shapes
 

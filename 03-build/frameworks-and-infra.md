@@ -4,17 +4,15 @@ What to build the agent *with*: whether to use a framework at all, which one, an
 
 ## You may not need a framework
 
-A framework is worth its abstraction cost when you need its orchestration — durable state, checkpointing, hand-offs, streaming, retries. For a single agent with a handful of tools and a loop you control, the model provider's SDK plus your own `while` loop is often less code and far easier to debug, and it keeps the loop's behaviour explicit ([architecture](../02-design/architecture.md)).
+A framework earns its abstraction cost when you need its orchestration — durable state, checkpointing, hand-offs, retries. For one agent, a few tools, and a loop you control, the provider SDK and your own `while` loop is less code and easier to debug ([architecture](../02-design/architecture.md)).
 
-Signals you want a framework: several agents to coordinate, runs that pause for a human, checkpointing and resume ([state & execution](state-and-execution.md)), or a team that benefits from a shared vocabulary. Signals you do not: one agent, three tools, and a clear spec.
-
-Whichever way you go, keep the framework at the edges. The tools, prompts, and adapters should not import it — that is what makes swapping it, or dropping it, a contained change ([architecture — evolvability](../02-design/architecture.md)).
+Either way, keep it at the edges: tools, prompts, and adapters must not import it. That is what makes dropping it a contained change ([evolvability](../02-design/architecture.md)).
 
 ## Agent frameworks
 
-The landscape is large and turns over fast, so any roster is a snapshot. The **axes** below are the durable part; the names are examples, not a shortlist.
+Any roster dates fast; the axes don't.
 
-**Control model** — who decides the next step. This is the axis you actually feel every day:
+**Control model** — who decides the next step:
 
 | Control model | How the next step is chosen | Examples |
 | --- | --- | --- |
@@ -24,35 +22,35 @@ The landscape is large and turns over fast, so any roster is a snapshot. The **a
 | **Retrieval-centric** | The indexing/retrieval pipeline is the product; the loop is thin | LlamaIndex, Haystack |
 | **Compiled / optimised** | You declare the input/output signature and a metric; the framework *generates and tunes the prompt* rather than you hand-writing it | DSPy |
 
-Two qualifications on that table. **Google ADK** deliberately spans the first two rows: `LlmAgent` is a model-driven loop, while its `Sequential`/`Parallel`/`Loop` workflow agents are explicit composition, and you nest them into a hierarchy. It is Gemini- and Vertex-optimised but not Gemini-only (other providers via LiteLLM), and its distinguishing feature is the deployment path — Vertex AI Agent Engine as a managed runtime — plus first-class A2A for cross-framework agent-to-agent calls. And **DSPy** is less an alternative to the others than a different bet: if you adopt it, prompts stop being files you edit and become artefacts compiled against a metric, which changes how [prompt versioning](rag-and-tooling.md) and evals work.
+**Google ADK** spans the first two rows: `LlmAgent` is a model-driven loop, `Sequential`/`Parallel`/`Loop` workflow agents are explicit composition, nested into hierarchies. Gemini/Vertex-optimised, not Gemini-only (LiteLLM); the real differentiator is Agent Engine as a managed runtime plus first-class A2A.
 
-### The LangChain family is a stack, not three competitors
+**DSPy** is a different bet rather than a peer: prompts stop being files you edit and become artefacts compiled against a metric, which changes [prompt versioning](rag-and-tooling.md) and evals.
 
-Worth separating, because "LangGraph vs LangChain vs Deep Agents" is a comparison people make and it is the wrong axis — they sit on top of each other:
+### The LangChain family stacks, it doesn't compete
 
-- **LangGraph** — the low-level runtime: graph execution, persistence, checkpointing, human-in-the-loop interrupts. This is the part that matters for production and the reason to be in this family at all.
-- **LangChain** — the application layer above it: model/tool abstractions, integrations, and `create_agent`, a minimal agent harness that itself runs on LangGraph.
-- **Deep Agents** (`deepagents`) — a batteries-included harness above both, adding planning, filesystem-based context management, and subagents for long-horizon tasks.
+- **LangGraph** — the runtime: graph execution, persistence, checkpointing, HITL interrupts.
+- **LangChain** — above it: model/tool abstractions, integrations, and `create_agent`, a minimal harness running on LangGraph.
+- **Deep Agents** (`deepagents`) — above both: planning, filesystem context management, subagents.
 
-So the real question is *which layer you want to own*, not which library to back. Dropping to LangGraph gives you control and costs boilerplate; taking `create_agent` or `create_deep_agent` gives you a working agent and costs you visibility into the loop. Note also that LangChain's older chain abstractions (`LLMChain` and friends) are not what "LangChain" means in current versions — a lot of tutorial material still shows them.
+The question is which layer you own. LangGraph costs boilerplate and buys control; `create_deep_agent` costs visibility into the loop and buys a working agent. Note that `LLMChain` and friends are not what "LangChain" means in current versions — most tutorial material still shows them.
 
-The other axes cut across that table:
+Axes cutting across the table:
 
-- **Durable state** — can a run checkpoint, pause, and resume in a *different process*? Few frameworks do this natively (LangGraph's checkpointers being the notable one). Most do not, which is the single most common reason a prototype has to be rebuilt ([state & execution](state-and-execution.md)).
-- **Language** — Python for most of the above; TypeScript teams have Mastra, the Vercel AI SDK, and LangGraph.js. Do not pick a Python framework for a TypeScript product to get a feature you could write in a day.
-- **Model coupling** — model-agnostic (LangGraph, CrewAI, Pydantic AI) versus optimised for one provider or cloud (Claude Agent SDK, OpenAI Agents SDK, Google ADK for Gemini/GCP, Strands for Bedrock, Microsoft Agent Framework — the successor to Semantic Kernel — for Azure/.NET). "Optimised for" rarely means "locked to": most of these reach other providers through an adapter. The coupling that actually binds you is the deployment and observability story, not the model call.
-- **Typing and validation** — whether the I/O contract from the agent spec is enforced at runtime or is a docstring. Pydantic AI is built around this; others bolt it on.
-- **What it gives you for free** — tracing, evals, guardrails, and a deployment story. Often the real reason to adopt one, and the thing most comparison posts omit.
+- **Durable state** — can a run checkpoint, pause, and resume in a *different process*? Few do this natively (LangGraph's checkpointers being the exception), and the gap is the most common reason a prototype gets rebuilt ([state & execution](state-and-execution.md)).
+- **Language** — Python for most; TypeScript has Mastra, the Vercel AI SDK, LangGraph.js.
+- **Model coupling** — agnostic (LangGraph, CrewAI, Pydantic AI) vs. optimised for a provider or cloud (Claude Agent SDK, OpenAI Agents SDK, ADK for Gemini/GCP, Strands for Bedrock, Microsoft Agent Framework — successor to Semantic Kernel — for Azure/.NET). Optimised rarely means locked: what binds you is the deployment and observability story, not the model call.
+- **Typing** — whether the spec's I/O contract is enforced at runtime or is a docstring. Pydantic AI is built on this; others bolt it on.
+- **What comes free** — tracing, evals, guardrails, deployment. Often the actual reason to adopt one, and the thing comparison posts omit.
 
 ## Choosing, in practice
 
-Two warnings about how this decision is usually made, because both produce regret:
+Two framing errors do most of the damage:
 
-**Durability is orthogonal to framework choice.** "My run pauses for a human" does not by itself select a framework — it selects a *persistence strategy*. You can get it from a framework's checkpointer, from a workflow engine underneath any framework (Temporal, Restate, Inngest), or from your own state table. Deciding these together is what leads teams to adopt a heavyweight framework for one feature.
+**Durability is orthogonal to framework choice.** "My run pauses for a human" selects a *persistence strategy*, not a framework — a checkpointer, a workflow engine underneath any framework (Temporal, Restate, Inngest), or your own state table. Conflating the two is how teams adopt a heavyweight framework for one feature.
 
-**Retrieval quality is not a framework property.** Chunking, hybrid retrieval, and reranking decide it, and you can run that pipeline under any of them ([RAG & tooling](rag-and-tooling.md)). "Retrieval is the hard part" argues for owning the pipeline, not for adopting the framework with the best-marketed loader set.
+**Retrieval quality is not a framework property.** Chunking, hybrid retrieval, and reranking decide it, under any of them ([RAG & tooling](rag-and-tooling.md)). "Retrieval is the hard part" argues for owning the pipeline, not for the best-marketed loader set.
 
-With those separated, the choice is mostly about control model and ergonomics, and the honest defaults are short:
+Defaults:
 
 - **Deterministic step order, high stakes, needs to resume** → an explicit graph plus real checkpointing.
 - **A genuinely open-ended loop over a tool set** → a model-driven SDK; the graph buys you nothing when the edges are "whatever the model decides".
@@ -60,20 +58,17 @@ With those separated, the choice is mostly about control model and ergonomics, a
 - **A prototype answering one question this month** → whatever the team already knows; it is meant to be thrown away ([scoping the first version](../01-framing/scoping-the-first-version.md)).
 - **One agent, a few tools, a clear spec** → the provider SDK and your own loop.
 
-Then two things that matter more than which one you picked:
-
-- **Pin the version.** Agent frameworks break interfaces between minor releases; an unpinned dependency becomes an unplanned migration mid-sprint.
-- **Keep it at the edges** — see above. If the choice turns out wrong, the cost of reversing it is set entirely by how far the framework's types leaked into your tools, prompts, and adapters.
+Pin the version — these break interfaces between minor releases. And the cost of reversing a wrong choice is set entirely by how far the framework's types leaked past the edges.
 
 ## API layer
 
-**FastAPI is the default** for exposing an agent as a service, and the reasons are specific to agents rather than taste: runs are I/O-bound (model calls, tool calls), so `async` lets one worker hold many in-flight runs; `StreamingResponse` covers token streaming to a chat UI; Pydantic models are already the I/O contract from the agent spec, so the API schema comes free; and `BackgroundTasks` plus a task queue covers the submit-and-poll shape most agents need ([state & execution](state-and-execution.md)). Flask remains fine for a small synchronous service or an internal endpoint, but you will fight it as soon as runs get long or need streaming.
+**FastAPI is the default**, for agent-specific reasons: runs are I/O-bound, so `async` holds many in flight per worker; `StreamingResponse` covers token streaming; the spec's Pydantic models are already the schema; `BackgroundTasks` plus a queue covers submit-and-poll ([state & execution](state-and-execution.md)). Flask is fine until runs get long or need streaming.
 
-Around the API, expect to need: a **task queue and workers** (Celery, RQ, Arq, or a managed queue) for background runs, a **state store** (Redis or Postgres) for sessions and checkpoints, and a **vector store** if the design uses retrieval ([vector databases](vector-databases.md)).
+Around it: a **task queue and workers** (Celery, RQ, Arq, managed) for background runs, a **state store** (Redis, Postgres) for sessions and checkpoints, a **vector store** if the design retrieves ([vector databases](vector-databases.md)).
 
 ### Talking to the front end
 
-The transport follows from the execution shape ([state & execution](state-and-execution.md)), and picking it late is expensive because it reaches into the UI:
+Transport follows from the execution shape ([state & execution](state-and-execution.md)); picking it late is expensive because it reaches into the UI.
 
 | Mode | Fits | Notes |
 | --- | --- | --- |
@@ -83,12 +78,12 @@ The transport follows from the execution shape ([state & execution](state-and-ex
 | **Submit + poll** | Multi-minute runs, anything with a human gate | `202` with a run id; the client polls status. Survives client disconnects and page reloads, which the streaming modes do not |
 | **Webhook / push** | Server-to-server, or notifying a user who has closed the tab | Needs an endpoint, retries, and signature verification on the receiving side |
 
-Two things worth deciding explicitly rather than discovering:
+Two consequences worth deciding up front:
 
-- **SSE reconnection is not run resumption.** `Last-Event-ID` lets the browser re-attach to a stream; it does nothing if the run itself died with the process. Real resumability comes from the run being checkpointed and the stream being replayable from a stored cursor — the transport only carries it.
-- **Long runs usually need two channels, not one.** A run id from a `POST` that returns immediately, plus a stream (SSE) or poll attached to that id. The single-long-lived-request design fails the first time someone reloads the page mid-run — and with a human gate in the flow, that is guaranteed.
+- **SSE reconnection is not run resumption.** `Last-Event-ID` re-attaches the browser to a stream; it does nothing if the run died with the process. Resumability comes from the checkpoint plus a replayable cursor — the transport only carries it. MCP dropped `Last-Event-ID` in its 2026-07-28 revision for this reason.
+- **Long runs need two channels.** A run id from a `POST` that returns immediately, plus a stream or poll against that id. The single-long-request design dies on the first page reload — guaranteed if there is a human gate.
 
-Buffering is the recurring bug: an intermediary that buffers a `text/event-stream` response turns streaming into a long pause followed by everything at once. Disable response buffering on the path (nginx `X-Accel-Buffering: no`, or the CDN's equivalent) and verify it end to end rather than against the dev server.
+Buffering is the recurring bug: an intermediary that buffers `text/event-stream` turns streaming into a pause then a dump. Set `X-Accel-Buffering: no` (or the CDN equivalent) and verify through the real path, not the dev server.
 
 ## MCP
 
@@ -96,12 +91,14 @@ Buffering is the recurring bug: an intermediary that buffers a `text/event-strea
 - See [architecture](../02-design/architecture.md) for where MCP sits in the layers, and [RAG & tooling](rag-and-tooling.md) for serving your own tools over it.
 - It is also the cheapest hedge against framework lock-in: tools exposed over MCP are reachable from any client, whatever orchestrates the loop.
 
-**MCP's transport is a different question from the one above.** The table in [talking to the front end](#talking-to-the-front-end) is about your app's users; MCP transport is about how your loop reaches its tools. The spec defines two bindings:
+**MCP transport is a separate axis** from the table above: that one is how users reach your app, this is how your loop reaches its tools. Two bindings:
 
-- **stdio** — newline-delimited JSON-RPC over a subprocess's standard streams. For a server on the same machine, single-user. The default for local tooling.
-- **Streamable HTTP** — every message is an HTTP POST to one endpoint (conventionally `/mcp`); the server replies with either a JSON object or a request-scoped SSE stream. This is what a remote MCP server should serve.
+- **stdio** — newline-delimited JSON-RPC over a subprocess's standard streams. Local, single-user.
+- **Streamable HTTP** — every message is a POST to one endpoint (conventionally `/mcp`); the server answers with `application/json` or a request-scoped SSE stream.
 
-The older **HTTP+SSE** transport (separate POST and GET-SSE endpoints, from protocol version 2024-11-05) was deprecated in the 2025-03-26 spec and is no longer a defined binding — it survives only as backward compatibility. If a guide has you opening a long-lived `/sse` endpoint alongside a `/messages` one, it predates the change. Note that SSE did not disappear: it is now a response mode *inside* Streamable HTTP rather than a transport of its own.
+"Streamable HTTP" is an MCP term, not a web standard — a binding over ordinary HTTP, not a new wire protocol. What MCP adds is the JSON-RPC schema plus body fields mirrored into headers (`MCP-Protocol-Version`, `Mcp-Method`, `Mcp-Name`) so intermediaries can route without parsing bodies.
+
+Two version traps: the **HTTP+SSE** transport (separate POST and GET-SSE endpoints, 2024-11-05) has been deprecated since 2025-03-26 and is no longer a defined binding — a guide pairing a long-lived `/sse` with `/messages` predates it. And revision **2026-07-28 removed sessions (`Mcp-Session-Id`), the GET stream, and `Last-Event-ID` resumability**, so requests are self-contained and need no sticky routing; much published material still describes the session-based shape.
 
 ## References
 

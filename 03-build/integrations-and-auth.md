@@ -1,6 +1,6 @@
 # Integrations & authentication
 
-An agent's usefulness is bounded by the systems it can reach, and connecting to them is usually where the build effort actually goes — the model call is the easy part. This note covers the mechanics: who the agent authenticates as, how credentials are held, and how to call real systems that rate-limit, paginate, and occasionally fail. The reversibility and permission *decisions* are made in [security & compliance](../02-design/security-and-compliance.md) and [feasibility & readiness](../01-framing/feasibility-and-readiness.md); this is how they are implemented.
+Connecting to real systems is where the build effort goes; the model call is the easy part. Mechanics here: who the agent authenticates as, how credentials are held, and how to call systems that rate-limit, paginate, and fail. The permission and reversibility *decisions* belong to [security & compliance](../02-design/security-and-compliance.md) and [feasibility & readiness](../01-framing/feasibility-and-readiness.md).
 
 ## Who is the agent acting as?
 
@@ -24,7 +24,7 @@ Ordinary secret hygiene applies and is not restated here. Three things are speci
 
 ## Rate limits, retries, and budgets
 
-An agent's call volume is non-deterministic: one hard case can trigger ten times the tool calls of a normal one. Assume you will hit limits.
+Call volume is non-deterministic — one hard case can trigger ten times the tool calls of a normal one. Assume you hit limits.
 
 - **Respect `Retry-After`**, then fall back to exponential backoff **with jitter** — without jitter, parallel runs retry in lockstep and re-create the spike.
 - **Retry transient failures only** — timeout, 429, 5xx. A 4xx is a bug in the arguments; retrying it just burns the step budget ([RAG & tooling](rag-and-tooling.md) has the `tenacity` pattern).
@@ -49,7 +49,7 @@ Tool results land in the context window and are paid for on every subsequent tur
 
 ## Environments
 
-Build against a **sandbox tenant with seeded, realistic data** — never production. If the vendor has no sandbox, that is a feasibility finding worth raising early, not a workaround to improvise: the fallbacks (a recorded fixture layer, a read-only prod mirror) cost real time and belong in the plan. Keep the seeded fixtures in the repo so contract tests can run nightly ([testing agent code](testing-agent-code.md)).
+Build against a **sandbox tenant with seeded, realistic data**. No vendor sandbox is a feasibility finding to raise early, not a workaround to improvise — the fallbacks (recorded fixtures, a read-only prod mirror) cost real time and belong in the plan. Keep fixtures in the repo so contract tests run nightly ([testing agent code](testing-agent-code.md)).
 
 ## Checklist for adding an integration
 
