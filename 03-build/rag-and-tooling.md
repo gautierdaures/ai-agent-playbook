@@ -91,6 +91,8 @@ What the pattern buys you:
 
 Business rules belong in the tool, not the prompt: a tool that refuses out-of-policy arguments is enforced, a prompt that asks the model to respect policy is a suggestion ([multi-agent orchestration](../02-design/multi-agent-orchestration.md)).
 
+When the tool talks to a real system, the identity it authenticates as, its rate-limit handling, and idempotency on writes are covered in [integrations & auth](integrations-and-auth.md); testing the validation and error branches without a model is in [testing agent code](testing-agent-code.md).
+
 ## Serving tools over MCP
 
 Expose the tool set through an MCP server so the agent discovers and calls tools through one interface, and tools can be added or swapped without touching the core loop. Keep the server's tool list scoped per agent — discovery is not a reason to expose every tool to everyone. Wiring and framework fit are in [frameworks & infrastructure](frameworks-and-infra.md); where MCP sits in the layers is in [architecture](../02-design/architecture.md).

@@ -24,7 +24,7 @@ Drive placement from the action's blast radius, not a blanket rule:
 ## Make gates selective and durable
 
 - **Selective** — gating everything defeats the point; reserve gates for the actions that warrant them.
-- **Durable** — a synchronous "wait for a click" gate fails when the approver is away. Design an asynchronous path: queue the request, hold state, resume on approval, and time out safely (fail closed on irreversible actions). This ties to the agent's [stop conditions and state](architecture.md).
+- **Durable** — a synchronous "wait for a click" gate fails when the approver is away. Design an asynchronous path: queue the request, hold state, resume on approval, and time out safely (fail closed on irreversible actions). This ties to the agent's [stop conditions and state](architecture.md). In build, this is what turns a run into a resumable workflow — see [state & execution](../03-build/state-and-execution.md).
 
 ## Progressive autonomy
 
