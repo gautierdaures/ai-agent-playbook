@@ -41,7 +41,7 @@ def test_low_confidence_escalates_without_drafting():
     assert len(model.calls) == 2               # no extra model calls burned
 ```
 
-This is where you assert the things the spec promised: that a confidence below 0.7 escalates, that the agent never sends without approval, that `max_steps` actually halts a loop. **Assert on structure — tool calls, sequence, schema, decisions — never on the model's prose.** Temperature 0 is not a determinism guarantee, and a test that pins wording fails on the next model release for no reason.
+This is where you assert the things the spec promised: that a confidence below 0.7 escalates, that the agent never sends without approval, that `max_steps` actually halts a loop. **Assert on structure — tool calls, sequence, schema, decisions — never on the model's prose.** A test that pins wording fails on the next model release for no reason, and a suite that cries wolf is one the team learns to ignore.
 
 For provider-level tests, record real responses once and replay them as fixtures. Refresh the recordings deliberately when you change model or prompt version — the refresh diff is a useful review artefact in itself.
 

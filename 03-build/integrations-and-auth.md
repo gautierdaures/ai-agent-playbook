@@ -16,10 +16,11 @@ Decide this per tool, before writing the adapter — it determines both the audi
 
 ## Credentials
 
-- **Secret manager only** — never in code, config files, environment files committed by accident, or (worst) the prompt. Anything in the context window can be exfiltrated by an injected instruction ([security & compliance](../02-design/security-and-compliance.md)).
-- **Short-lived tokens, rotated**, with separate credentials per environment. Prod credentials must not work from a developer laptop.
-- **One credential per integration per environment**, so revoking one thing does not take down everything.
-- **Least privilege, verified** — read-only means the token cannot write, not that the tool chooses not to. Ask the owning team for a scoped credential rather than a convenient one.
+Ordinary secret hygiene applies and is not restated here. Three things are specific to agents:
+
+- **The credential must never reach the context window.** Not in the prompt, and not by accident either: a tool that surfaces a raw HTTP error can echo an `Authorization` header into the transcript, and an unhandled exception can carry a connection string. Anything in context is reachable by an injected instruction, and is also written to your traces. Redact at the adapter boundary and assert it in a test ([security & compliance](../02-design/security-and-compliance.md), [logging](../06-operations/logging.md)).
+- **A run can outlive its token.** A run that checkpoints at a human gate on Friday resumes on Monday, and the access token it was carrying expired in between. Resolve credentials *at the point of use* rather than at run start, and checkpoint the identity the run acts for — never the bearer token, which would put a live credential in the state store ([state & execution](state-and-execution.md)).
+- **Scope is enforced by the token, not by the tool.** The model chooses the arguments, so "read-only" implemented as *this adapter only issues GETs* is one injection or one refactor away from being false. Get a credential that cannot write, and let the API reject the call.
 
 ## Rate limits, retries, and budgets
 
