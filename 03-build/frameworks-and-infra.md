@@ -22,13 +22,25 @@ The landscape is large and turns over fast, so any roster is a snapshot. The **a
 | **Model-driven loop** | The model picks tools until it stops; the framework does the plumbing | OpenAI Agents SDK, Claude Agent SDK, Strands Agents, Pydantic AI, Agno, Smolagents |
 | **Role-based / conversational** | Agents with roles hand off or talk to each other | CrewAI, AutoGen / AG2 |
 | **Retrieval-centric** | The indexing/retrieval pipeline is the product; the loop is thin | LlamaIndex, Haystack |
-| **Compiled / optimised** | You declare the signature; the framework tunes the prompt against a metric | DSPy |
+| **Compiled / optimised** | You declare the input/output signature and a metric; the framework *generates and tunes the prompt* rather than you hand-writing it | DSPy |
+
+Two qualifications on that table. **Google ADK** deliberately spans the first two rows: `LlmAgent` is a model-driven loop, while its `Sequential`/`Parallel`/`Loop` workflow agents are explicit composition, and you nest them into a hierarchy. It is Gemini- and Vertex-optimised but not Gemini-only (other providers via LiteLLM), and its distinguishing feature is the deployment path — Vertex AI Agent Engine as a managed runtime — plus first-class A2A for cross-framework agent-to-agent calls. And **DSPy** is less an alternative to the others than a different bet: if you adopt it, prompts stop being files you edit and become artefacts compiled against a metric, which changes how [prompt versioning](rag-and-tooling.md) and evals work.
+
+### The LangChain family is a stack, not three competitors
+
+Worth separating, because "LangGraph vs LangChain vs Deep Agents" is a comparison people make and it is the wrong axis — they sit on top of each other:
+
+- **LangGraph** — the low-level runtime: graph execution, persistence, checkpointing, human-in-the-loop interrupts. This is the part that matters for production and the reason to be in this family at all.
+- **LangChain** — the application layer above it: model/tool abstractions, integrations, and `create_agent`, a minimal agent harness that itself runs on LangGraph.
+- **Deep Agents** (`deepagents`) — a batteries-included harness above both, adding planning, filesystem-based context management, and subagents for long-horizon tasks.
+
+So the real question is *which layer you want to own*, not which library to back. Dropping to LangGraph gives you control and costs boilerplate; taking `create_agent` or `create_deep_agent` gives you a working agent and costs you visibility into the loop. Note also that LangChain's older chain abstractions (`LLMChain` and friends) are not what "LangChain" means in current versions — a lot of tutorial material still shows them.
 
 The other axes cut across that table:
 
 - **Durable state** — can a run checkpoint, pause, and resume in a *different process*? Few frameworks do this natively (LangGraph's checkpointers being the notable one). Most do not, which is the single most common reason a prototype has to be rebuilt ([state & execution](state-and-execution.md)).
 - **Language** — Python for most of the above; TypeScript teams have Mastra, the Vercel AI SDK, and LangGraph.js. Do not pick a Python framework for a TypeScript product to get a feature you could write in a day.
-- **Model coupling** — model-agnostic (LangGraph, CrewAI, Pydantic AI) versus optimised for one provider or cloud (Claude Agent SDK, OpenAI Agents SDK, Google ADK for Gemini/GCP, Strands for Bedrock, Microsoft Agent Framework for Azure).
+- **Model coupling** — model-agnostic (LangGraph, CrewAI, Pydantic AI) versus optimised for one provider or cloud (Claude Agent SDK, OpenAI Agents SDK, Google ADK for Gemini/GCP, Strands for Bedrock, Microsoft Agent Framework — the successor to Semantic Kernel — for Azure/.NET). "Optimised for" rarely means "locked to": most of these reach other providers through an adapter. The coupling that actually binds you is the deployment and observability story, not the model call.
 - **Typing and validation** — whether the I/O contract from the agent spec is enforced at runtime or is a docstring. Pydantic AI is built around this; others bolt it on.
 - **What it gives you for free** — tracing, evals, guardrails, and a deployment story. Often the real reason to adopt one, and the thing most comparison posts omit.
 
@@ -94,6 +106,9 @@ The older **HTTP+SSE** transport (separate POST and GET-SSE endpoints, from prot
 ## References
 
 - [LangChain — The best AI agent frameworks](https://www.langchain.com/resources/ai-agent-frameworks)
+- [LangChain — Deep Agents vs LangChain vs LangGraph](https://www.langchain.com/blog/deep-agents-vs-langchain-vs-langgraph) — which layer of that stack to build on.
+- [Google — Agent Development Kit](https://google.github.io/adk-docs/) — workflow agents, multi-agent hierarchies, and the Agent Engine deployment path.
+- [DSPy](https://dspy.ai/) — programming, not prompting: signatures, modules, and compiling against a metric.
 - [Langfuse — Comparing open-source AI agent frameworks](https://langfuse.com/blog/2025-03-19-ai-agent-comparison) — a comparison written from tracing real runs rather than from docs.
 - [Firecrawl — Best open source agent frameworks](https://www.firecrawl.dev/blog/best-open-source-agent-frameworks)
 - [FastAPI documentation](https://fastapi.tiangolo.com/) — async endpoints, streaming responses, background tasks.
