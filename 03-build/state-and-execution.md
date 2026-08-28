@@ -59,6 +59,6 @@ Make it explicit per run type; guessing produces the duplicate-refund class of b
 
 ## References
 
-- [LangGraph — persistence and checkpointing](https://langchain-ai.github.io/langgraph/concepts/persistence/) — checkpointers, threads, resuming, and human-in-the-loop interrupts.
-- [Temporal — durable execution](https://docs.temporal.io/) — the general pattern for workflows that pause, resume, and survive process death.
+- [LangGraph — persistence](https://docs.langchain.com/oss/python/langgraph/persistence) — checkpointers, threads, resuming, and human-in-the-loop interrupts.
+- [Temporal — understanding durable execution](https://docs.temporal.io/evaluate/understanding-temporal) — the general pattern for workflows that pause, resume, and survive process death.
 - [The Twelve-Factor App — processes & disposability](https://12factor.net/processes) — why state belongs in a backing store, not the process.

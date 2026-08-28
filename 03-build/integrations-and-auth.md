@@ -65,6 +65,8 @@ Build against a **sandbox tenant with seeded, realistic data** — never product
 
 ## References
 
-- [OWASP Top 10 for LLM Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/) — excessive agency and insecure plugin/tool design.
+- [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/) — excessive agency is LLM06:2025, broken into excessive functionality, permissions, and autonomy.
 - [RFC 8693 — OAuth 2.0 Token Exchange](https://datatracker.ietf.org/doc/html/rfc8693) — the on-behalf-of pattern.
+- [AWS — Exponential backoff and jitter](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) — why jitter, and not backoff alone, stops retries re-creating the spike.
+- [Stripe — idempotent requests](https://docs.stripe.com/api/idempotent_requests) — a worked idempotency-key contract: client-generated key, stored result, replayed response.
 - [Model Context Protocol](https://modelcontextprotocol.io/) — a common interface for exposing tools to agents.
