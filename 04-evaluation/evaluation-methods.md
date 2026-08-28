@@ -2,6 +2,8 @@
 
 Continuous evaluation is a first-class design goal, not an afterthought (see [framing goals](../01-framing/project-framing.md)).
 
+Evals measure the agent's judgement. The deterministic layer around it — tools, schemas, the loop, guardrails — is covered by ordinary tests in build ([testing agent code](../03-build/testing-agent-code.md)); don't use evals to find a bug a unit test would have caught.
+
 ## Deterministic where you can
 
 For rational or deterministic chains, use deterministic evaluation: exact, reproducible checks rather than LLM-judged ones.

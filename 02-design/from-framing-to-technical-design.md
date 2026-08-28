@@ -117,6 +117,8 @@ The artefact of this step is a short **solution-design / technical-framing doc**
 
 Keep it traceable back to the one-page use-case card so a reviewer can follow a design choice all the way to the business reason for it. A practical test: pick any line in section 5 and ask "which framing output forced this?" — if there is no answer, it is over-design.
 
+This doc is also what build starts from: [from design to code](../03-build/from-design-to-code.md) picks up the handover.
+
 ## Don't over-design
 
 Start with the simplest thing that can hit the success criteria, and escalate only when the numbers demand it: a single call, then a fixed workflow, then an agent, then multiple agents. Autonomy is a cost, not a feature ([do you need an agent?](../01-framing/do-you-need-an-agent.md)). The technical framing doc should justify each step up that ladder with a measurement, not a preference.

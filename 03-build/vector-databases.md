@@ -1,6 +1,6 @@
 # Vector databases
 
-A vector database stores embeddings for similarity search — the backbone of [RAG](rag-and-tooling.md) and of [long-term memory](../02-design/memory.md) (user profile, conversation schema).
+A vector database stores embeddings for similarity search — the backbone of [RAG](rag-and-tooling.md) and of [long-term memory](../02-design/memory.md) (user profile, conversation schema). Pick one after the pipeline shape is settled — chunking, hybrid retrieval, and reranking decide more of your quality than the store does.
 
 ## When they help — and when they don't
 
