@@ -23,10 +23,13 @@ Some concerns are **cross-cutting**: value, evaluation, cost, observability, sec
 | Autonomy levels | [`01-framing/do-you-need-an-agent`](01-framing/do-you-need-an-agent.md) |
 | Human-in-the-loop design | [`02-design/human-in-the-loop`](02-design/human-in-the-loop.md) |
 | Evaluation techniques | [`04-evaluation/evaluation-methods`](04-evaluation/evaluation-methods.md) |
+| Human review & annotation | [`04-evaluation/eval-datasets`](04-evaluation/eval-datasets.md) |
+| Release gating on evals | [`04-evaluation/regression-and-drift`](04-evaluation/regression-and-drift.md) |
 | Staged rollout / progressive autonomy | [`05-deployment/rollout-and-safety`](05-deployment/rollout-and-safety.md) |
 | Adoption & change management | [`05-deployment/adoption-and-change-management`](05-deployment/adoption-and-change-management.md) |
 | Cost (designed in 2, run in 6) | [`06-operations/cost-management`](06-operations/cost-management.md) |
 | Logging & observability | [`06-operations/`](06-operations/) |
+| Alerting & anomaly detection | [`06-operations/alerting-and-anomaly-detection`](06-operations/alerting-and-anomaly-detection.md) |
 | Security, privacy & compliance | [`02-design/security-and-compliance`](02-design/security-and-compliance.md) |
 
 ## How to use

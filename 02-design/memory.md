@@ -29,6 +29,8 @@ Don't stuff the entire conversation into context. Keep what matters accessible a
 - Store summaries or embeddings, and **retrieve on demand** via an API or history lookup.
 - **Compact and prune** as the session grows — summarize older turns, drop what's no longer relevant. This is the mitigation for context overflow ([error handling](error-handling.md)).
 
+How you prove any of this works — in-session recall, cross-session recall, knowledge updates, abstention, scope isolation — is [multi-turn & memory evaluation](../04-evaluation/multi-turn-and-memory.md).
+
 ## References
 
 - [Anthropic — Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — curating the context window; the finite-attention / context-rot problem.
