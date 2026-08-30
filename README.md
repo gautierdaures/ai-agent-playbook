@@ -28,8 +28,10 @@ Some concerns are **cross-cutting**: value, evaluation, cost, observability, sec
 | Staged rollout / progressive autonomy | [`05-deployment/rollout-and-safety`](05-deployment/rollout-and-safety.md) |
 | Adoption & change management | [`05-deployment/adoption-and-change-management`](05-deployment/adoption-and-change-management.md) |
 | Cost (designed in 2, run in 6) | [`06-operations/cost-management`](06-operations/cost-management.md) |
-| Logging & observability | [`06-operations/`](06-operations/) |
+| Logging & observability | [`06-operations/monitoring-and-observability`](06-operations/monitoring-and-observability.md) |
 | Alerting & anomaly detection | [`06-operations/alerting-and-anomaly-detection`](06-operations/alerting-and-anomaly-detection.md) |
+| Incident response | [`06-operations/incident-response`](06-operations/incident-response.md) |
+| Production feedback loop & iteration | [`06-operations/continuous-improvement`](06-operations/continuous-improvement.md) |
 | Security, privacy & compliance | [`02-design/security-and-compliance`](02-design/security-and-compliance.md) |
 
 ## How to use

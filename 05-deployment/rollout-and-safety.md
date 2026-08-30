@@ -21,6 +21,8 @@ Roll out data occultation and masking in tiers rather than all at once:
 
 Start simple and increase sophistication as you gain confidence.
 
+The ladder also runs downwards: dropping a rung is the first containment move in an [incident](../06-operations/incident-response.md), which is why the autonomy level must be runtime config rather than code.
+
 ## Absolute stop conditions
 
 Shipping an absolute stop condition is mandatory in production — it is the hard backstop against runaway loops and cost. The conditions themselves (timeout, max iterations, max items) and the design rationale live in [error handling](../02-design/error-handling.md).

@@ -74,7 +74,7 @@ Practical rules:
 
 ## Close the loop
 
-Every online failure — a breached policy, a bad judge score, a user override — becomes an offline case within the week. That flow is the only thing that keeps the offline suite representative, and it is what makes production monitoring an evaluation activity rather than a dashboard.
+Every online failure — a breached policy, a bad judge score, a user override — becomes an offline case within the week. That flow is the only thing that keeps the offline suite representative, and it is what makes production monitoring an evaluation activity rather than a dashboard. The operational cadence that runs it is [feedback loops & iteration](../06-operations/continuous-improvement.md).
 
 A/B testing sits on top: once traffic is sufficient, compare versions on live outcomes rather than on eval scores. It is the most trustworthy comparison available and the slowest — offline gates the deploy, A/B confirms the win ([rollout & safety](../05-deployment/rollout-and-safety.md)).
 
