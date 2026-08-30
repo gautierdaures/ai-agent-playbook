@@ -20,6 +20,36 @@ flowchart TD
 
 That taxonomy *is* the eval suite. Metrics invented before error analysis measure what you imagined, and the well-known outcome is a dashboard of green "helpfulness 4.2/5" scores next to users complaining. Expect this reading to absorb a large share of total eval effort — it is the work, not the preamble.
 
+## From trace to case
+
+A trace is **evidence, not a test**. Keeping the failed runs and replaying them is the intuitive move and the wrong one: transcripts contain the old agent's outputs, so replaying them mostly re-measures a system you no longer run.
+
+What you extract from a failed run is the **input, the environment it ran against, and the invariant it violated**:
+
+```yaml
+id: CASE-014
+mode: FM-03-quoted-stale-price     # the failure mode, not the trace
+source_trace: tr_9f2c1a            # provenance for a human, not part of the test
+input:
+  message: "Can you confirm the renewal price for account 88213?"
+fixtures:
+  db: seeds/retail-2026-03.sql     # reset to a known state before each run
+  clock: 2026-03-14T09:00:00Z      # so temporal behaviour is reproducible
+assert:
+  - state: quotes.where(account=88213).count == 1
+  - absent: ["guaranteed", "locked in"]
+  - judge: names_the_validity_window
+reference: |                       # the expert's corrected answer
+  The renewal price is €412/yr, valid until 31 March...
+```
+
+**"Define what it should have been" holds only for closed-form tasks.** Where there is genuinely one right answer — extraction, classification, routing, a SQL query you grade on its *result set* rather than its text, arithmetic — store the gold answer and compare directly. For open-ended output there is no single correct text, and pinning one turns your suite into a prose-diffing machine that fails on every harmless rewording. There you store the *violated invariant* as the assertion, and keep the expert's correction as `reference`: material for a judge to compare against and for a human to read, never an exact-match target.
+
+Two consequences worth stating plainly:
+
+- **One case set per failure mode, not one case per trace.** A hundred traces typically collapse to five or ten modes; you want a handful of cases per mode, covering its variants. Fifty near-duplicate cases of the same bug inflate your pass rate and slow every run.
+- **The trace archive and the eval set are different stores** with different lifetimes. Traces are sampled, retention-limited, and full of PII ([logging](../06-operations/logging.md)). Cases are versioned in git, small, and scrubbed.
+
 ## Where cases come from
 
 | Source | Gives you | Watch out |

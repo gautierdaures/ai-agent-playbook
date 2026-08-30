@@ -54,7 +54,17 @@ The gap is brutal. If your dashboard says 75% and your users say it's unreliable
 | 90% | 81% | 73% | 59% | 43% |
 | 75% | 56% | 42% | 24% | 10% |
 
-Run **k trials per case** (3–5 is usually enough to see the problem), report the spread, and never gate a release on a single-trial number.
+(The table assumes a fixed per-trial probability and independent trials — the idealised case. Real cases are not identical in difficulty, which is why you estimate rather than assume.)
+
+**How to actually compute it.** Not by running exactly k trials and checking they all passed — that gives one bit per case and wastes most of the information. Run **n trials** (n ≥ k), count the successes **c** per case, and use the τ-bench estimator:
+
+```
+pass^k  =  mean over cases of  C(c, k) / C(n, k)
+```
+
+That is the probability that a randomly chosen k of your n trials all succeeded. One sweep at n = 8 therefore yields pass^1 through pass^8 without re-running anything, and n = 3 gives you a coarse pass^1–3 (c can only be 0–3). τ-bench used ≥3 trials for headline numbers and 40+ per task for the reliability analysis; for a release gate, n = 5 is a reasonable floor and the number you can afford is usually the real constraint.
+
+Report the spread across trials, and never gate a release on a single-trial number.
 
 ## Two kinds of eval set, two target scores
 
@@ -84,6 +94,6 @@ Having several agents argue a point reduces errors, surfaces disagreement, and c
 ## References
 
 - [Anthropic — Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) — outcome vs. transcript grading, the three grader types, pass@k vs. pass^k, capability vs. regression sets, eval saturation.
-- [Sierra — τ-bench: benchmarking AI agents for the real world](https://sierra.ai/blog/benchmarking-ai-agents) — database-state grading and the pass^k reliability collapse.
+- [Sierra — τ-bench: benchmarking AI agents for the real world](https://sierra.ai/blog/benchmarking-ai-agents) and the paper, [τ-bench: a benchmark for tool-agent-user interaction](https://arxiv.org/abs/2406.12045) — database-state grading, and the pass^k definition `E_task[C(c,k)/C(n,k)]` alongside pass@k.
 - [Hamel Husain & Shreya Shankar — LLM Evals: everything you need to know](https://hamel.dev/blog/posts/evals-faq/) — error analysis before infrastructure.
 - [UK AISI — Inspect](https://inspect.aisi.org.uk/) — open-source eval framework structured as datasets / solvers / scorers, with sandboxed agent tasks.
