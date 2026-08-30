@@ -4,6 +4,18 @@ Knowing whether it actually works.
 
 _Scope: eval design, datasets, human review, LLM-as-judge, multi-turn & memory, guardrail evals, online evaluation, CI triggers, regression gating._
 
+```mermaid
+flowchart LR
+    P["Production traces"] --> EA["Error analysis<br>eval-datasets"]
+    EA --> DS["Eval suites<br>frozen + rolling"]
+    DS --> G["Graders: code / judge / human<br>evaluation-methods, llm-as-judge"]
+    G --> CI["Triggers + tiers<br>eval-in-ci"]
+    CI --> GATE["Release gate<br>regression-and-drift"]
+    GATE --> DEP["Canary, then deploy"]
+    DEP --> ON["Guardrails + sampled scoring<br>online-evaluation"]
+    ON --> P
+```
+
 ## Notes
 
 - [evaluation-methods.md](evaluation-methods.md) — canonical: outcome vs. trajectory grading, the three grader types, pass@k vs. pass^k, capability vs. regression sets, expert debate.

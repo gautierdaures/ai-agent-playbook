@@ -26,6 +26,16 @@ The register is the contract between compliance and engineering, and it is what 
 | **Classifier / validator** | Topic bans, PII, injection detection, output format | Latency in the tens to low hundreds of milliseconds; run in parallel with the model call where possible |
 | **Post-hoc judge** | Nuanced clauses ("did it give advice or information?") | Slow and non-deterministic; use for measurement, and for blocking only when nothing cheaper works |
 
+```mermaid
+flowchart LR
+    IN["User input"] --> G1["Input rails<br>injection, PII, topic bans"]
+    G1 --> AG["Agent + tools"]
+    T["Tool output, retrieved docs<br>— also untrusted"] --> AG
+    AG --> G2["Output rails<br>caps, allow-lists, required disclosures"]
+    G2 --> OUT["Response"]
+    G2 -.->|"blocked or uncertain"| ESC["Escalate to human"]
+```
+
 **Eval each layer at its own layer, then eval the composition.** A validator with 99% recall in isolation tells you nothing about the system if the agent phrases things the validator never sees.
 
 ## Test both directions

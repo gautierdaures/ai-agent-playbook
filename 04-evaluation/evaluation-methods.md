@@ -25,7 +25,17 @@ Transcripts are for **diagnosis**: once a case fails, the trace tells you why. T
 | **Model** | Medium | No — needs calibration | Open-ended quality, tone, faithfulness to a source, rubric adherence |
 | **Human** | High | Gold standard | Calibrating the other two, ambiguous cases, the initial failure taxonomy |
 
-The ladder is strict: **use a judge only for what code cannot check.** Every check you can express as an assertion is one you never have to re-validate, never pay for, and that never drifts. Teams routinely reach for a judge on things like "is the JSON valid", "did it cite a real document ID", "is the total under the cap" — all of which are one line of Python.
+```mermaid
+flowchart TD
+    Q["What must this case prove?"] --> S{"Did the world change?"}
+    S -->|Yes| ST["Assert on end state<br>row exists, tests pass, file written"]
+    S -->|No| C{"Expressible as code?"}
+    C -->|Yes| A["Deterministic assertion<br>schema, IDs resolve, amount under cap"]
+    C -->|No| J["LLM judge"]
+    J --> H["Held-out human labels<br>calibrate and re-validate"]
+```
+
+**Use a judge only for what code cannot check.** Teams routinely reach for one on "is the JSON valid", "did it cite a real document ID", "is the total under the cap" — all one line of Python, and unlike a judge they never drift and never need re-validating.
 
 Human graders never disappear; they move from *scoring everything* to *calibrating the graders that score everything*.
 
@@ -36,7 +46,13 @@ Agents are stochastic and the variance is large. Two metrics:
 - **pass@k** — succeeds at least once in k attempts. Relevant when a human picks from candidates, or when retrying is free.
 - **pass^k** — succeeds in *all* k attempts. This is the production metric, because users hit the agent once and expect it to work.
 
-The gap is brutal: a 75% per-trial success rate is roughly **42% at pass^3**. If your dashboard says 75% and your users say it's unreliable, they are both right — you are measuring pass@1 and they are experiencing pass^k.
+The gap is brutal. If your dashboard says 75% and your users say it's unreliable, you are both right — you measure pass@1, they experience pass^k:
+
+| Per-trial | pass^2 | pass^3 | pass^5 | pass^8 |
+| --- | --- | --- | --- | --- |
+| 95% | 90% | 86% | 77% | 66% |
+| 90% | 81% | 73% | 59% | 43% |
+| 75% | 56% | 42% | 24% | 10% |
 
 Run **k trials per case** (3–5 is usually enough to see the problem), report the spread, and never gate a release on a single-trial number.
 

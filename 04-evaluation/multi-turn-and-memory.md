@@ -54,7 +54,20 @@ Split by horizon, because they fail for different reasons ([memory & context eng
 
 These map onto LongMemEval's five abilities — information extraction, multi-session reasoning, temporal reasoning, knowledge updates, and abstention — which is a usable checklist even if you never run the benchmark itself. Its headline result is the reason to test at all: commercial assistants and long-context models lose around 30% accuracy on information carried across sustained interaction.
 
-**Instrument the memory pipeline separately.** Memory is indexing → retrieval → reading. When a memory case fails, you need to know *which* stage failed: log what was written, what was retrieved for the query, and what reached the context. Grading only the final answer tells you memory is broken without telling you where — and the fix for a retrieval miss (query expansion, time-aware search) has nothing to do with the fix for a reading failure (the fact was in context and the model ignored it).
+**Instrument the pipeline separately**, because grading only the final answer tells you memory is broken without telling you where — and the fix for a retrieval miss (query expansion, time-aware search) has nothing to do with the fix for a reading failure:
+
+```mermaid
+flowchart LR
+    F["Fact stated<br>session A"] --> W["Write / extract"]
+    W --> I[("Memory store")]
+    Q["Question<br>session B"] --> R["Retrieve"]
+    I --> R
+    R --> C["Reaches context"]
+    C --> A["Answer"]
+    W -.->|"never written"| X1["Extraction failure"]
+    R -.->|"not retrieved"| X2["Retrieval failure"]
+    C -.->|"in context, ignored"| X3["Reading failure"]
+```
 
 **Abstention deserves its own metric.** An agent that answers everything scores well on recall tests and lies to users about what it remembers.
 

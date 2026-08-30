@@ -29,6 +29,20 @@ This extends the tool-definition snapshotting from [testing agent code](../03-bu
 
 ## Tier the suites
 
+```mermaid
+flowchart TD
+    PR["Pull request"] --> H{"Rendered prompt + tool-definition<br>hash changed?"}
+    H -->|No| UT["Unit / loop / guardrail tests<br>no model, under a minute"]
+    H -->|Yes| SM["Smoke suite<br>10–30 cases, 1 trial"]
+    SM --> M["Merge to main"]
+    UT --> M
+    M --> REG["Regression + blocking guardrail suites<br>k trials"]
+    REG --> GATE["Release gate<br>regression-and-drift"]
+    CRON["Nightly / weekly cron"] --> EXP["Capability, simulation,<br>adversarial, multi-turn memory"]
+    EXP --> NEW["New failures → suites"]
+    NEW --> REG
+```
+
 | Tier | Size | Budget | Trigger |
 | --- | --- | --- | --- |
 | **Smoke** | 10–30 cases, 1 trial | < 5 min, a few cents | Every PR that trips a hash |

@@ -47,9 +47,20 @@ Emit an explicit metric every time a fallback path is taken: degraded answers se
 
 ## Alert on SLOs, not thresholds
 
-Static thresholds on agent metrics either page constantly or never. Define an SLO per user-visible symptom — successful runs, p95 latency — and use **multi-window, multi-burn-rate** alerting: a short window catches fast burns, a long window catches slow ones, and requiring both to fire kills most of the noise. This applies as well to a *quality* SLO as to an availability one.
+Static thresholds on agent metrics either page constantly or never. Define an SLO per user-visible symptom — successful runs, p95 latency — and use **multi-window, multi-burn-rate** alerting: a short window catches fast burns, a long window catches slow ones, and requiring both kills most of the noise. It applies as well to a *quality* SLO as to an availability one.
 
-Route by severity, not by metric: page on user-visible symptoms, ticket everything else. An agent stack generates enough weak signals to bury an on-call rotation in a week.
+```mermaid
+flowchart LR
+    D["Dependencies<br>429, 5xx, auth, timeouts"] --> SLO
+    R["Run health<br>step limits, bad output, cost"] --> SLO
+    C["Synthetic canary"] --> SLO
+    Q["Quality<br>online-evaluation"] --> SLO
+    SLO["SLO burn rate<br>short window AND long window"] --> SEV{"User-visible symptom?"}
+    SEV -->|Yes| PAGE["Page"]
+    SEV -->|No| TICKET["Ticket"]
+```
+
+Route by severity, not by metric. An agent stack generates enough weak signals to bury an on-call rotation in a week.
 
 ## Instrument to a standard
 

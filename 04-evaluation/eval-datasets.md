@@ -4,11 +4,21 @@ The eval set is the real specification. Everything downstream — the judge, the
 
 ## Error analysis before infrastructure
 
-The first move is not to pick a platform. It is to **read traces**. Open ~100 production or pilot runs, write a free-form note on each about what went wrong, then cluster the notes into a failure taxonomy. Stop when ~20 new traces stop producing new failure modes.
+The first move is not to pick a platform. It is to **read traces**.
 
-That taxonomy *is* the eval suite: each recurring failure mode becomes a set of cases and a check. Metrics invented before error analysis measure what you imagined, and the well-known outcome is a dashboard of green "helpfulness 4.2/5" scores next to users complaining. Expect this reading to absorb a large share of total eval effort — it is the work, not the preamble.
+```mermaid
+flowchart TD
+    T["Open ~100 production or pilot runs"] --> N["Free-form note per trace:<br>what went wrong here?"]
+    N --> C["Cluster notes into failure modes"]
+    C --> SAT{"~20 new traces,<br>no new modes?"}
+    SAT -->|No| T
+    SAT -->|Yes| TAX["Failure taxonomy"]
+    TAX --> CASE["Per mode: cases + the check that catches it"]
+    CASE --> W["10–20 traces a week thereafter,<br>weighted to outliers and flagged runs"]
+    W --> C
+```
 
-After that, review 10–20 traces a week, weighted toward outliers and flagged runs, so the taxonomy keeps up with reality.
+That taxonomy *is* the eval suite. Metrics invented before error analysis measure what you imagined, and the well-known outcome is a dashboard of green "helpfulness 4.2/5" scores next to users complaining. Expect this reading to absorb a large share of total eval effort — it is the work, not the preamble.
 
 ## Where cases come from
 
@@ -28,7 +38,7 @@ Engineers cannot label a mortgage decision, a clinical summary, or a legal claus
 
 - **One principal domain expert owns the label.** A single "benevolent dictator" who sets the standard beats a committee: multi-annotator disagreement on a fuzzy rubric produces a dataset nobody trusts. Add more experts only when the domains genuinely differ (billing vs. clinical), not to spread the load.
 - **They own the rubric, in their words.** If the rubric needs an engineer to interpret it, it is wrong.
-- **Their throughput is the binding constraint.** Every second of friction in the review UI is multiplied by thousands of items. This is the whole reason tooling matters.
+- **Their review time caps the size of your dataset.** Nothing else does — not compute, not engineering effort. If the expert gives you two hours a week, then at 90 seconds per item you get 80 labels a week and at 30 seconds you get 240: a usable set in a month instead of a quarter. Seconds-per-item is the only lever you control, which is why the review tool is worth engineering effort — everything needed for the judgement on one screen, keyboard shortcuts, no tab-switching to find the source document, no export/import round trip.
 - **Disagreements are rubric bugs.** When two reviewers disagree, fix the definition rather than averaging the scores. If you do run multiple annotators, measure agreement (Cohen's κ, Krippendorff's α) and treat a low value as a signal that the criterion is under-specified.
 
 Link this to the value case: the same experts define the business KPIs ([measuring value](../01-framing/measuring-value.md)) and staff the review gates ([human-in-the-loop](../02-design/human-in-the-loop.md)).

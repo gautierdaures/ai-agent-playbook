@@ -15,9 +15,24 @@
 
 **The rule: if it changes the response, it is a guardrail and belongs in the product code with a latency budget, a timeout, and an explicit fail-open/fail-closed decision. If it only produces a number, it runs out of band on the trace.**
 
-Putting a judge in the synchronous path *just to record a metric* is the common mistake: it doubles cost and latency, and it adds a dependency that can fail the user request in order to compute a statistic nobody reads in real time.
+```mermaid
+flowchart LR
+    U["User request"] --> G1["Guardrail — in path, blocking"]
+    G1 --> AG["Agent"]
+    AG --> G2["Output guardrail"]
+    G2 --> RESP["Response"]
+    AG -.-> TR[("Trace store")]
+    RESP --> FB["Edits, retries, overrides,<br>downstream outcome"]
+    FB --> TR
+    TR --> SMP["Sampled scoring — async,<br>zero user impact"]
+    SMP --> AL["Dashboards + alerts"]
+    SMP --> NC["New eval cases"]
+    NC --> OFF["Offline suite → CI gate"]
+```
 
-Where a check must block, keep it cheap and preferably deterministic — schema validation, regex, an amount cap, a small classifier — and run it concurrently with the model call rather than after it, so the check hides inside the generation latency ([guardrail evaluation](guardrail-evaluation.md)).
+Putting a judge in the synchronous path *just to record a metric* is the common mistake: it doubles cost and latency, and adds a dependency that can fail a user request in order to compute a statistic nobody reads in real time.
+
+Where a check must block, keep it cheap and preferably deterministic — schema validation, regex, an amount cap, a small classifier — and run it concurrently with the model call so it hides inside generation latency ([guardrail evaluation](guardrail-evaluation.md)).
 
 ## Sample deliberately
 

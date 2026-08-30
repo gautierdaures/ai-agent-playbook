@@ -4,14 +4,7 @@ A judge is a classifier you did not train, did not validate, and cannot see insi
 
 ## Use it last, not first
 
-The ladder from [evaluation methods](evaluation-methods.md):
-
-1. **State/outcome check** — did the row appear, does the code compile, is the total correct?
-2. **Deterministic assertion** — schema valid, citation IDs exist in the corpus, forbidden phrase absent, amount under the cap.
-3. **Judge** — only for what is genuinely a matter of quality: faithfulness to a source, tone, rubric adherence, "did it answer the question asked".
-4. **Human** — the ambiguous residue, and calibration of step 3.
-
-Most "we need a judge" requests are step-2 problems in disguise.
+Work down the [grader ladder](evaluation-methods.md#three-graders) first — state check, then deterministic assertion — and reach for a judge only for what is genuinely a matter of quality: faithfulness to a source, tone, rubric adherence, "did it answer the question asked". Most "we need a judge" requests are deterministic-assertion problems in disguise.
 
 ## Design rules
 
@@ -24,14 +17,20 @@ Most "we need a judge" requests are step-2 problems in disguise.
 
 ## Validate it as a classifier
 
-The question is never "does the judge seem sensible", it is **"how often is it wrong, and in which direction"**:
+The question is never "does the judge seem sensible", it is **"how often is it wrong, and in which direction"**.
 
-- Label a held-out set by hand (the principal domain expert's labels — see [eval datasets](eval-datasets.md)).
-- Measure **true positive rate and true negative rate** separately. Accuracy alone hides the asymmetry, and the asymmetry is what matters: a faithfulness judge that never catches a hallucination is worthless even at 90% accuracy on a mostly-clean set.
-- **Correct for judge error when reporting.** If the judge flags 8% and its TPR/TNR are known, the true rate is recoverable; the raw 8% is not the answer.
-- Re-validate when you change judge model, rubric, or the population being judged.
+```mermaid
+flowchart LR
+    R["Rubric"] --> J["Judge prompt"]
+    J --> S["Score a held-out set"]
+    E["Expert labels<br>eval-datasets"] --> CMP{"TPR and TNR<br>acceptable?"}
+    S --> CMP
+    CMP -->|No| FIX["Almost always the rubric,<br>not the model"]
+    FIX --> R
+    CMP -->|Yes| PIN["Pin judge model + prompt + rubric version;<br>re-validate when any of them changes"]
+```
 
-If the judge cannot be brought into agreement with the expert, the problem is almost always the **rubric**, not the model. Ambiguity that humans paper over with intuition is exactly what a judge exposes.
+Measure **TPR and TNR separately** — accuracy alone hides the asymmetry, and the asymmetry is what matters: a faithfulness judge that never catches a hallucination still scores 90% on a mostly-clean set. And **correct for judge error when reporting**: if the judge flags 8% and its TPR/TNR are known, the true rate is recoverable; the raw 8% is not the answer.
 
 ## Known biases and the cheap mitigations
 

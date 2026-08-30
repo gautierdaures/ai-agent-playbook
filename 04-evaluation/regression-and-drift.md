@@ -61,10 +61,19 @@ A model upgrade is the largest regression event you will run, and deprecation sc
 
 The offline gate authorises a *canary*, not a fleet-wide switch:
 
-- Route a percentage of traffic to the new version, tagged by version ID.
-- Compare online metrics between canary and control — the free signals (edits, overrides, retries, escalations) plus sampled judge scores.
-- Define the automatic rollback condition in advance, ideally as an error-budget burn rate rather than a raw threshold.
-- Keep the old prompt version deployable; rollback must be a config change, not a rebuild.
+```mermaid
+flowchart TD
+    CH["Prompt / model / tool change"] --> P["Paired run:<br>same cases, same seeds, k trials"]
+    P --> D["Mean difference + confidence interval"]
+    D --> G{"Blocking rails zero-fail,<br>diff within δ,<br>cost and p95 in budget?"}
+    G -->|No| STOP["Do not deploy"]
+    G -->|Yes| CAN["Canary: % of traffic, tagged by version ID"]
+    CAN --> ON{"Canary vs. control on<br>overrides, edits, sampled scores"}
+    ON -->|"burn rate exceeded"| RB["Auto-rollback"]
+    ON -->|stable| FULL["Full rollout"]
+```
+
+Define the rollback condition *before* the canary starts, as an error-budget burn rate rather than a raw threshold, and keep the previous prompt version deployable — rollback must be a config change, not a rebuild.
 
 Staged rollout mechanics live in [rollout & safety](../05-deployment/rollout-and-safety.md); the production metrics being watched are in [key metrics & SRE](../06-operations/metrics-and-sre.md).
 
