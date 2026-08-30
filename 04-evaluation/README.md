@@ -5,7 +5,7 @@ Knowing whether it actually works.
 _Scope: eval design, datasets, human review, LLM-as-judge, multi-turn & memory, guardrail evals, online evaluation, CI triggers, regression gating._
 
 ```mermaid
-flowchart LR
+flowchart TB
     P["Production traces"] --> EA["Error analysis<br>eval-datasets"]
     EA --> DS["Eval suites<br>frozen + rolling"]
     DS --> G["Graders: code / judge / human<br>evaluation-methods, llm-as-judge"]
