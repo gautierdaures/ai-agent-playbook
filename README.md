@@ -15,13 +15,14 @@ Notes and thinking on building AI agents — from framing a project through to r
 
 The phases are a **map, not a waterfall.** Real projects iterate Scrum-style — evaluation feeds back into framing, production signals reopen design — so treat the order as the dependency structure, not a one-way gate.
 
-Some concerns are **cross-cutting**: value, evaluation, cost, observability, security, and adoption are all *designed* in an early phase but *run* later. To keep them from being re-explained in every section, each has **one canonical home** and is linked from everywhere else:
+Some concerns are **cross-cutting** — value, evaluation, error handling, cost, observability, security, adoption. Some are designed in an early phase and run later; others are native to one phase but referenced from all of them. Either way, each has **one canonical home** and is linked from everywhere else rather than re-explained in every section:
 
 | Cross-cutting concern | Canonical home |
 |---|---|
 | Value, KPIs, freed-time ROI | [`01-framing/measuring-value`](01-framing/measuring-value.md) |
 | Autonomy levels | [`01-framing/do-you-need-an-agent`](01-framing/do-you-need-an-agent.md) |
 | Human-in-the-loop design | [`02-design/human-in-the-loop`](02-design/human-in-the-loop.md) |
+| Error handling, retries & stop conditions | [`02-design/error-handling`](02-design/error-handling.md) |
 | Evaluation techniques | [`04-evaluation/evaluation-methods`](04-evaluation/evaluation-methods.md) |
 | Human review & annotation | [`04-evaluation/eval-datasets`](04-evaluation/eval-datasets.md) |
 | Release gating on evals | [`04-evaluation/regression-and-drift`](04-evaluation/regression-and-drift.md) |
