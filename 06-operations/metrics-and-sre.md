@@ -14,4 +14,4 @@
 - Follow-up metrics for SRE: success rate, cost, API coverage, and number of calls per run or session, versus what was anticipated for the LLM.
 - Retry and fallback, for example on the run or on the ranker.
 
-Prompt changes are gated by [regression testing](../04-evaluation/regression-and-drift.md); cost detail lives in [cost management](cost-management.md); the retry & fallback pattern is designed in [error handling](../02-design/error-handling.md).
+Turning these metrics into alerts that fire usefully is [alerting & anomaly detection](alerting-and-anomaly-detection.md). Prompt changes are gated by [the release gate](../04-evaluation/regression-and-drift.md); cost detail lives in [cost management](cost-management.md); the retry & fallback pattern is designed in [error handling](../02-design/error-handling.md).

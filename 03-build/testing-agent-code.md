@@ -66,7 +66,7 @@ A tool's name, description, and parameter docs are prompt ([tool design](../02-d
 
 - **Every PR** — unit, schema/snapshot, loop, and guardrail tests. No API keys, no network, under a minute.
 - **Nightly** — adapter contract tests against sandbox credentials, so third-party drift is caught by a build rather than by a user.
-- **On any prompt, model, or tool-definition change** — the eval set, gated on the release criteria from the agent spec.
+- **On any prompt, model, or tool-definition change** — the eval set, gated on the release criteria from the agent spec. Which suite runs on which change is [evals in CI](../04-evaluation/eval-in-ci.md).
 - **Pre-deploy** — smoke tests on a couple of golden cases with the real model.
 
 Keep the model out of the fast lane: a suite needing API keys and 40 s per case stops being run.

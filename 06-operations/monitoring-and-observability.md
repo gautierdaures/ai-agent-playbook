@@ -30,7 +30,7 @@ These platforms treat the LLM trace as the primary object — nested spans acros
 
 - Prefer tools built on **OpenTelemetry** (Phoenix, OpenLLMetry, and OTel export from Langfuse) to avoid vendor lock-in and reuse existing infra like SigNoz or Datadog.
 
-Traceability requirements come from [rollout & production safety](../05-deployment/rollout-and-safety.md).
+Traceability requirements come from [rollout & production safety](../05-deployment/rollout-and-safety.md). What to *alert* on once these traces exist is [alerting & anomaly detection](alerting-and-anomaly-detection.md); scoring production traffic for quality is [online evaluation](../04-evaluation/online-evaluation.md).
 
 ## References
 
